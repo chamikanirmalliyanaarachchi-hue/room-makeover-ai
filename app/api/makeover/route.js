@@ -4,7 +4,7 @@ export const maxDuration = 60;
 
 /**
  * ============================================================================
- * AI ROOM & DESK MAKEOVER - 4K ULTRA-HD SPATIAL ARCHITECTURE ENGINE
+ * AI ROOM & DESK MAKEOVER - HD SPATIAL ARCHITECTURE ENGINE
  * ============================================================================
  */
 
@@ -18,7 +18,7 @@ const DESIGN_STYLES_DB = {
     windowTreatment: "Sleek matte-black horizontal slatted Venetian blinds replacing old curtains, keeping the exact window frame intact",
     doorwayTreatment: "Clean dark-trimmed doorway opening preserved in the exact same spot with subtle ambient LED accent lighting inside the adjacent room",
     flooringUpgrade: "Rich dark walnut wide-plank hardwood flooring with a modern dark geometric woven gaming rug",
-    cameraSpec: "Shot on Hasselblad H6D-100c, 24mm f/2.8 architectural lens, ultra-sharp 4K UHD micro-textures, zero noise, natural ray-traced reflections, clean image with no watermarks or logos"
+    cameraSpec: "Shot on Hasselblad H6D-100c, 24mm f/2.8 architectural lens, ultra-sharp HD micro-textures, zero noise, natural ray-traced reflections, clean image with no watermarks or logos"
   },
 
   "Modern Luxury Aesthetic": {
@@ -30,7 +30,7 @@ const DESIGN_STYLES_DB = {
     windowTreatment: "Floor-to-ceiling sheer cream linen drapes layered over motorized warm-gray blackout shades inside the exact window frame",
     doorwayTreatment: "Refined dark-wood architectural door frame preserved in its exact position leading into a warmly lit minimalist hallway",
     flooringUpgrade: "Wide-plank European natural oak herringbone hardwood flooring with a plush cream boucle textured area rug and a tall ceramic planter with a fiddle-leaf fig",
-    cameraSpec: "Shot on Hasselblad H6D-100c, 24mm f/2.8 lens, Architectural Digest 4K UHD editorial photography, ultra-crisp fabric and wood grain details, no watermarks or logos"
+    cameraSpec: "Shot on Hasselblad H6D-100c, 24mm f/2.8 lens, Architectural Digest HD editorial photography, ultra-crisp fabric and wood grain details, no watermarks or logos"
   },
 
   "Minimalist Scandinavian": {
@@ -42,7 +42,7 @@ const DESIGN_STYLES_DB = {
     windowTreatment: "Crisp white linen Roman blinds inside the exact window frame filtering bright soft daylight",
     doorwayTreatment: "Clean white-painted wooden doorway trim preserved in its exact original spot opening into a bright clean room",
     flooringUpgrade: "Pale Scandinavian ash wood plank flooring with a handwoven natural beige jute rug and a lush snake plant in a woven seagrass basket",
-    cameraSpec: "Shot on Hasselblad H6D-100c, 24mm f/2.8 lens, Kinfolk magazine 4K UHD natural lighting, razor-sharp organic textures, no watermarks or logos"
+    cameraSpec: "Shot on Hasselblad H6D-100c, 24mm f/2.8 lens, Kinfolk magazine HD natural lighting, razor-sharp organic textures, no watermarks or logos"
   },
 
   "Cyberpunk Neon Studio": {
@@ -54,7 +54,7 @@ const DESIGN_STYLES_DB = {
     windowTreatment: "Dark anodized aluminum Venetian blinds inside the exact window frame bathed in dramatic cyan and magenta rim light",
     doorwayTreatment: "Dark industrial doorway frame preserved in its exact position with futuristic neon accent strips visible inside",
     flooringUpgrade: "Dark matte slate stone tile flooring with a dark geometric neon-bordered studio rug",
-    cameraSpec: "Shot on Hasselblad H6D-100c, 24mm f/2.8 lens, cinematic 4K UHD cyberpunk color grading, razor-sharp specular reflections, no watermarks or logos"
+    cameraSpec: "Shot on Hasselblad H6D-100c, 24mm f/2.8 lens, cinematic HD cyberpunk color grading, razor-sharp specular reflections, no watermarks or logos"
   },
 
   "Warm Japandi & Wood Aesthetic": {
@@ -66,7 +66,7 @@ const DESIGN_STYLES_DB = {
     windowTreatment: "Natural woven bamboo wood roll-up shades inside the exact window frame casting warm organic light patterns",
     doorwayTreatment: "Natural dark-stained timber doorway frame preserved in its exact position opening into a serene warm-toned room",
     flooringUpgrade: "Warm natural oak plank flooring with a textured oatmeal wool rug and an indoor olive tree in a handmade terracotta planter",
-    cameraSpec: "Shot on Hasselblad H6D-100c, 24mm f/2.8 lens, tranquil organic shadows, Architectural Digest 4K UHD photography, no watermarks or logos"
+    cameraSpec: "Shot on Hasselblad H6D-100c, 24mm f/2.8 lens, tranquil organic shadows, Architectural Digest HD photography, no watermarks or logos"
   }
 };
 
@@ -179,7 +179,7 @@ function buildMasterArchitecturalPrompt(styleName, spatialLayout) {
   const spec = DESIGN_STYLES_DB[styleName] || DESIGN_STYLES_DB["Cozy Gaming & RGB Desk Setup"];
 
   const promptParts = [
-    `Exact in-place 4K ultra-HD interior renovation of this uploaded room photo.`,
+    `Exact in-place HD interior renovation of this uploaded room photo.`,
     `STRICT STRUCTURAL LOCK: ${spatialLayout} Do NOT add extra windows, do NOT close or move doorways, do NOT change desk shape or camera perspective.`,
     `WALLS: ${spec.wallTreatment}.`,
     `DESK & TECH: ${spec.deskUpgrade}. ${spec.pcAndTech}.`,
@@ -193,10 +193,10 @@ function buildMasterArchitecturalPrompt(styleName, spatialLayout) {
 }
 
 async function renderMakeoverImage({ prompt, imageUrl, apiKey, origin, seed }) {
-  // High-resolution 2048x1536 (2K/4K grade) first, with 1536x1152 fallback
+  // Validated HD resolutions supported by Pollinations Kontext (no invalid quality param)
   const candidateUrls = [
-    `https://gen.pollinations.ai/image/${encodeURIComponent(prompt)}?model=kontext&image=${encodeURIComponent(imageUrl)}&width=2048&height=1536&quality=100&nologo=true&enhance=false&seed=${seed}`,
-    `https://gen.pollinations.ai/image/${encodeURIComponent(prompt)}?model=kontext&image=${encodeURIComponent(imageUrl)}&width=1536&height=1152&quality=100&nologo=true&enhance=false&seed=${seed + 1}`
+    `https://gen.pollinations.ai/image/${encodeURIComponent(prompt)}?model=kontext&image=${encodeURIComponent(imageUrl)}&width=1536&height=1152&nologo=true&enhance=false&seed=${seed}`,
+    `https://gen.pollinations.ai/image/${encodeURIComponent(prompt)}?model=kontext&image=${encodeURIComponent(imageUrl)}&width=1280&height=960&nologo=true&enhance=false&seed=${seed + 1}`
   ];
 
   let lastErrorStatus = 500;
