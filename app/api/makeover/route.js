@@ -5,7 +5,6 @@ export const maxDuration = 60;
 async function uploadTempImage(buffer, mimeType) {
   const blob = new Blob([buffer], { type: mimeType || "image/jpeg" });
 
-  // 1. tmpfiles.org
   try {
     const fd1 = new FormData();
     fd1.append("file", blob, "room.jpg");
@@ -21,7 +20,6 @@ async function uploadTempImage(buffer, mimeType) {
     }
   } catch (_) {}
 
-  // 2. 0x0.st backup
   try {
     const fd2 = new FormData();
     fd2.append("file", blob, "room.jpg");
@@ -42,6 +40,13 @@ async function uploadTempImage(buffer, mimeType) {
 export async function POST(req) {
   try {
     const { imageBase64, mimeType, style } = await req.json();
+    const rawKey = process.env.POLLINATIONS_API_KEY || "";
+    const apiKey = rawKey.replace(/['"\s]/g, "");
+
+    if (!apiKey) {
+      return NextResponse.json({ error: "POLLINATIONS_API_KEY missing in Vercel" }, { status: 500 });
+    }
+
     const buffer = Buffer.from(imageBase64, "base64");
     const seed = Math.floor(Math.random() * 1000000);
 
@@ -52,10 +57,11 @@ export async function POST(req) {
 
     const prompt = `Keep the exact same room layout, camera angle, window position, doorway position, and computer desk placement from this photo, but completely renovate and upgrade it into an ultra-realistic ${style}. Replace old curtains with modern designer blinds, upgrade the desk, chair, PC setup, wall finishes, floor, and add warm architectural LED lighting, indoor plants, and luxury decor. Photorealistic 8k interior design photography.`;
 
-    // New 2026 Pollinations Endpoint (gen.pollinations.ai) with Kontext Image-to-Image + Flux fallback
+    const origin = req.headers.get("origin") || "https://room-makeover-ai-nu.vercel.app";
+
     const endpoints = [
       `https://gen.pollinations.ai/image/${encodeURIComponent(prompt)}?model=kontext&image=${encodeURIComponent(tempImageUrl)}&width=1024&height=768&nologo=true&seed=${seed}`,
-      `https://gen.pollinations.ai/image/${encodeURIComponent(prompt)}?model=flux&image=${encodeURIComponent(tempImageUrl)}&width=1024&height=768&nologo=true&seed=${seed}`
+      `https://gen.pollinations.ai/image/${encodeURIComponent(prompt)}?model=flux&width=1024&height=768&nologo=true&seed=${seed}`
     ];
 
     let lastStatus = 500;
@@ -63,7 +69,12 @@ export async function POST(req) {
 
     for (const url of endpoints) {
       const res = await fetch(url, {
-        headers: { "User-Agent": "Mozilla/5.0" }
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          Origin: origin,
+          Referer: `${origin}/`,
+          "User-Agent": "Mozilla/5.0"
+        }
       });
       const contentType = res.headers.get("content-type") || "";
 
@@ -73,10 +84,13 @@ export async function POST(req) {
       }
 
       lastStatus = res.status;
-      lastMsg = (await res.text()).slice(0, 120);
+      lastMsg = (await res.text()).slice(0, 140);
     }
 
-    return NextResponse.json({ error: `Server (${lastStatus}): ${lastMsg}` }, { status: 500 });
+    return NextResponse.json(
+      { error: `Key(${apiKey.slice(0, 5)}...) -> Server (${lastStatus}): ${lastMsg}` },
+      { status: 500 }
+    );
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
