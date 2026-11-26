@@ -2,42 +2,81 @@ import { NextResponse } from "next/server";
 
 export const maxDuration = 60;
 
+async function uploadTempImage(buffer, mimeType) {
+  const blob = new Blob([buffer], { type: mimeType || "image/jpeg" });
+
+  // 1. tmpfiles.org
+  try {
+    const fd1 = new FormData();
+    fd1.append("file", blob, "room.jpg");
+    const res1 = await fetch("https://tmpfiles.org/api/v1/upload", {
+      method: "POST",
+      headers: { "User-Agent": "Mozilla/5.0" },
+      body: fd1
+    });
+    if (res1.ok) {
+      const json1 = await res1.json();
+      const url = json1?.data?.url;
+      if (url) return url.replace("tmpfiles.org/", "tmpfiles.org/dl/");
+    }
+  } catch (_) {}
+
+  // 2. 0x0.st backup
+  try {
+    const fd2 = new FormData();
+    fd2.append("file", blob, "room.jpg");
+    const res2 = await fetch("https://0x0.st", {
+      method: "POST",
+      headers: { "User-Agent": "curl/8.0" },
+      body: fd2
+    });
+    if (res2.ok) {
+      const txt2 = (await res2.text()).trim();
+      if (txt2.startsWith("http")) return txt2;
+    }
+  } catch (_) {}
+
+  return null;
+}
+
 export async function POST(req) {
   try {
     const { imageBase64, mimeType, style } = await req.json();
-    const hfToken = process.env.HF_TOKEN;
+    const buffer = Buffer.from(imageBase64, "base64");
+    const seed = Math.floor(Math.random() * 1000000);
 
-    if (!hfToken) {
-      return NextResponse.json({ error: "HF_TOKEN missing in Vercel" }, { status: 500 });
+    const tempImageUrl = await uploadTempImage(buffer, mimeType);
+    if (!tempImageUrl) {
+      return NextResponse.json({ error: "Image upload host busy. Please try again." }, { status: 500 });
     }
 
-    const prompt = `Transform this exact room into a ${style}. Keep the exact same room layout, walls, window, doorway, camera angle, and computer desk placement, but upgrade the furniture, lighting, curtains, wall finish, and decor into an ultra-realistic professional interior design photo.`;
+    const prompt = `Keep the exact same room layout, camera angle, window position, doorway position, and computer desk placement from this photo, but completely renovate and upgrade it into an ultra-realistic ${style}. Replace old curtains with modern designer blinds, upgrade the desk, chair, PC setup, wall finishes, floor, and add warm architectural LED lighting, indoor plants, and luxury decor. Photorealistic 8k interior design photography.`;
 
-    // 1. Official Hugging Face Router -> Fal-AI FLUX Kontext (Real Image-to-Image Editing!)
-    const hfRes = await fetch("https://router.huggingface.co/fal-ai/fal-ai/flux-kontext/dev", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${hfToken}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        prompt,
-        image_url: `data:${mimeType || "image/jpeg"};base64,${imageBase64}`
-      })
-    });
+    // New 2026 Pollinations Endpoint (gen.pollinations.ai) with Kontext Image-to-Image + Flux fallback
+    const endpoints = [
+      `https://gen.pollinations.ai/image/${encodeURIComponent(prompt)}?model=kontext&image=${encodeURIComponent(tempImageUrl)}&width=1024&height=768&nologo=true&seed=${seed}`,
+      `https://gen.pollinations.ai/image/${encodeURIComponent(prompt)}?model=flux&image=${encodeURIComponent(tempImageUrl)}&width=1024&height=768&nologo=true&seed=${seed}`
+    ];
 
-    if (hfRes.ok) {
-      const data = await hfRes.json();
-      const outUrl = data?.images?.[0]?.url || data?.image?.url;
-      if (outUrl) {
-        const imgFetch = await fetch(outUrl);
-        const arr = await imgFetch.arrayBuffer();
+    let lastStatus = 500;
+    let lastMsg = "Busy";
+
+    for (const url of endpoints) {
+      const res = await fetch(url, {
+        headers: { "User-Agent": "Mozilla/5.0" }
+      });
+      const contentType = res.headers.get("content-type") || "";
+
+      if (res.ok && contentType.startsWith("image/")) {
+        const arr = await res.arrayBuffer();
         return NextResponse.json({ resultImage: `data:image/jpeg;base64,${Buffer.from(arr).toString("base64")}` });
       }
+
+      lastStatus = res.status;
+      lastMsg = (await res.text()).slice(0, 120);
     }
 
-    const errText = await hfRes.text();
-    return NextResponse.json({ error: `Status ${hfRes.status}: ${errText.slice(0, 180)}` }, { status: 500 });
+    return NextResponse.json({ error: `Server (${lastStatus}): ${lastMsg}` }, { status: 500 });
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
