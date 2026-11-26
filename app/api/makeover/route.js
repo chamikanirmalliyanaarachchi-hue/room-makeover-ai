@@ -5,7 +5,6 @@ export const maxDuration = 60;
 async function uploadTempImage(buffer, mimeType) {
   const blob = new Blob([buffer], { type: mimeType || "image/jpeg" });
 
-  // 1. Catbox.moe (Direct permanent CDN link that Pollinations servers can always fetch)
   try {
     const fd1 = new FormData();
     fd1.append("reqtype", "fileupload");
@@ -21,7 +20,6 @@ async function uploadTempImage(buffer, mimeType) {
     }
   } catch (_) {}
 
-  // 2. Uguu.se fallback
   try {
     const fd2 = new FormData();
     fd2.append("files[]", blob, "room.jpg");
@@ -58,12 +56,11 @@ export async function POST(req) {
       return NextResponse.json({ error: "Image upload host busy. Please try again." }, { status: 500 });
     }
 
-    // Strict Image-to-Image editing prompt
-    const prompt = `Edit this exact room photo into a ${style}. Strictly preserve the exact same camera angle, room geometry, left computer desk position, PC monitor and tower placement, barred window on the left, wall structure, and open doorway on the right. Upgrade the old desk, chair, curtains, wall paint, floor, and lighting into a photorealistic luxury interior design.`;
+    // Action-driven makeover prompt so Kontext actually transforms the furniture, walls, curtains & lighting
+    const prompt = `Dramatic interior makeover of this room into a ${style}. Replace the yellow tablecloth desk with a sleek modern luxury desk, replace the plastic chairs with an ergonomic designer chair, remove the orange curtain and calendar and install modern minimalist blinds, repaint the walls in rich modern tones, upgrade the floor with warm wood panels, and add glowing ambient LED lighting, indoor plants, and high-end gaming/studio decor while keeping the window on the left and doorway on the right.`;
 
     const origin = req.headers.get("origin") || "https://room-makeover-ai-nu.vercel.app";
 
-    // Only use true Image-to-Image models (never text-only fallback!)
     const endpoints = [
       `https://gen.pollinations.ai/image/${encodeURIComponent(prompt)}?model=kontext&image=${encodeURIComponent(tempImageUrl)}&width=1024&height=768&nologo=true&seed=${seed}`,
       `https://gen.pollinations.ai/image/${encodeURIComponent(prompt)}?model=seedream&image=${encodeURIComponent(tempImageUrl)}&width=1024&height=768&nologo=true&seed=${seed}`
