@@ -4,32 +4,24 @@ export const maxDuration = 60;
 
 /**
  * ============================================================================
- * AI ROOM & DESK MAKEOVER - ENTERPRISE SPATIAL ARCHITECTURE & DESIGN ENGINE
- * ============================================================================
- * Pipeline:
- * 1. Multi-Host Resilient CDN Uploader (Catbox -> Uguu -> Tmpfiles)
- * 2. AI Spatial Vision Analyzer (Extracts exact walls, windows, doors & layout)
- * 3. Architectural Style & Lighting Compiler (Maps 8 interior layers per style)
- * 4. Strict Geometry-Locked Image-to-Image Renderer (enhance=false to prevent drift)
+ * AI ROOM & DESK MAKEOVER - 4K ULTRA-HD SPATIAL ARCHITECTURE ENGINE
  * ============================================================================
  */
 
 const DESIGN_STYLES_DB = {
   "Cozy Gaming & RGB Desk Setup": {
-    category: "Gaming & Creator Studio",
     lightingMood: "Vibrant dual-tone cyan (#00F5D4) and warm magenta (#FF007F) neon rim lighting balanced with warm 3000K indirect ambient glow",
     wallTreatment: "Dark matte charcoal vertical acoustic wood-slat panels on solid wall sections, accented with modular glowing hexagonal RGB light panels and floating dark walnut shelves holding mini potted plants",
-    deskUpgrade: "Sleek matte-black carbon-fiber gaming desk in the exact same position, fitted with concealed under-desk neon LED strips, an extended RGB micro-weave desk mat, custom mechanical RGB keyboard, wireless gaming mouse, and compact studio monitor speakers",
+    deskUpgrade: "Sleek matte-black carbon-fiber gaming desk in the exact same position, fitted with concealed under-desk neon LED strips, an extended RGB micro-weave desk mat, custom mechanical RGB keyboard, wireless gaming mouse, and studio monitor speakers",
     pcAndTech: "Upgraded tempered-glass RGB gaming PC tower with glowing fans in the exact PC spot, paired with a sleek ultra-thin bezel curved gaming monitor displaying vibrant dark-mode gaming aesthetics",
     seatingUpgrade: "Plush black-and-accent high-back ergonomic racing gaming chair replacing the original chair",
-    windowTreatment: "Sleek matte-black horizontal slatted Venetian blinds replacing old curtains, keeping the exact window frame and bars intact",
+    windowTreatment: "Sleek matte-black horizontal slatted Venetian blinds replacing old curtains, keeping the exact window frame intact",
     doorwayTreatment: "Clean dark-trimmed doorway opening preserved in the exact same spot with subtle ambient LED accent lighting inside the adjacent room",
     flooringUpgrade: "Rich dark walnut wide-plank hardwood flooring with a modern dark geometric woven gaming rug",
-    cameraSpec: "Shot on Sony A7R V, 24mm f/1.4 GM wide-angle architectural lens, crisp HDR exposure, natural ray-traced reflections, 8k photorealistic interior photography"
+    cameraSpec: "Shot on Hasselblad H6D-100c, 24mm f/2.8 architectural lens, ultra-sharp 4K UHD micro-textures, zero noise, natural ray-traced reflections, clean image with no watermarks or logos"
   },
 
   "Modern Luxury Aesthetic": {
-    category: "High-End Contemporary Luxury",
     lightingMood: "Warm 3000K architectural cove lighting, soft natural daylight diffusion, and warm brass accent lamp glow",
     wallTreatment: "Smooth warm greige Venetian plaster walls with subtle vertical architectural trim molding and framed minimalist abstract gallery artwork",
     deskUpgrade: "Bespoke fluted walnut and brushed-brass executive desk in the exact original desk position with concealed warm under-desk LED strip lighting and clutter-free leather desk pad",
@@ -38,11 +30,10 @@ const DESIGN_STYLES_DB = {
     windowTreatment: "Floor-to-ceiling sheer cream linen drapes layered over motorized warm-gray blackout shades inside the exact window frame",
     doorwayTreatment: "Refined dark-wood architectural door frame preserved in its exact position leading into a warmly lit minimalist hallway",
     flooringUpgrade: "Wide-plank European natural oak herringbone hardwood flooring with a plush cream boucle textured area rug and a tall ceramic planter with a fiddle-leaf fig",
-    cameraSpec: "Shot on Sony A7R V, 24mm f/1.4 GM lens, Architectural Digest editorial lighting, balanced highlights and shadows, 8k photorealistic"
+    cameraSpec: "Shot on Hasselblad H6D-100c, 24mm f/2.8 lens, Architectural Digest 4K UHD editorial photography, ultra-crisp fabric and wood grain details, no watermarks or logos"
   },
 
   "Minimalist Scandinavian": {
-    category: "Nordic Minimalist Sanctuary",
     lightingMood: "Bright, airy, soft diffused natural Nordic daylight with gentle warm 3200K task lighting",
     wallTreatment: "Warm matte alabaster-white painted walls accented with natural pale-oak vertical wood slats and floating light-birch shelves displaying white ceramic vases, art books, and trailing green pothos plants",
     deskUpgrade: "Solid light-ash wood minimalist Scandinavian desk in the exact original position with clean slim legs and tidy wooden desk organizer",
@@ -51,11 +42,10 @@ const DESIGN_STYLES_DB = {
     windowTreatment: "Crisp white linen Roman blinds inside the exact window frame filtering bright soft daylight",
     doorwayTreatment: "Clean white-painted wooden doorway trim preserved in its exact original spot opening into a bright clean room",
     flooringUpgrade: "Pale Scandinavian ash wood plank flooring with a handwoven natural beige jute rug and a lush snake plant in a woven seagrass basket",
-    cameraSpec: "Shot on Sony A7R V, 24mm f/1.4 GM lens, Kinfolk magazine natural lighting aesthetic, clean organic textures, 8k photorealistic"
+    cameraSpec: "Shot on Hasselblad H6D-100c, 24mm f/2.8 lens, Kinfolk magazine 4K UHD natural lighting, razor-sharp organic textures, no watermarks or logos"
   },
 
   "Cyberpunk Neon Studio": {
-    category: "Futuristic Sci-Fi Creator Setup",
     lightingMood: "High-contrast cinematic electric-blue (#00BBF9) and hot-pink (#F15BB5) neon tube lighting with moody dark reflections",
     wallTreatment: "Matte-black 3D geometric acoustic foam wall tiles paired with vertical glowing cyan and magenta LED light tubes and dark metal grid wall shelves",
     deskUpgrade: "Heavy matte-black industrial tech desk in the exact original spot featuring glowing neon edge trim, dual-tier monitor riser, and extended futuristic desk mat",
@@ -64,11 +54,10 @@ const DESIGN_STYLES_DB = {
     windowTreatment: "Dark anodized aluminum Venetian blinds inside the exact window frame bathed in dramatic cyan and magenta rim light",
     doorwayTreatment: "Dark industrial doorway frame preserved in its exact position with futuristic neon accent strips visible inside",
     flooringUpgrade: "Dark matte slate stone tile flooring with a dark geometric neon-bordered studio rug",
-    cameraSpec: "Shot on Sony A7R V, 24mm f/1.4 GM lens, cinematic cyberpunk color grading, sharp specular reflections, 8k photorealistic"
+    cameraSpec: "Shot on Hasselblad H6D-100c, 24mm f/2.8 lens, cinematic 4K UHD cyberpunk color grading, razor-sharp specular reflections, no watermarks or logos"
   },
 
   "Warm Japandi & Wood Aesthetic": {
-    category: "Japanese-Scandinavian Zen Workspace",
     lightingMood: "Tranquil golden-hour warm sunlight (2700K) filtered through natural shades with soft hidden cove lighting",
     wallTreatment: "Textured warm beige limewash plaster walls with handcrafted vertical cedar wood slats and a minimalist framed Japanese sumi-e ink artwork",
     deskUpgrade: "Handcrafted dark-stained oak slatted desk in the exact original position with concealed warm cove lighting and solid walnut wrist rest",
@@ -77,91 +66,61 @@ const DESIGN_STYLES_DB = {
     windowTreatment: "Natural woven bamboo wood roll-up shades inside the exact window frame casting warm organic light patterns",
     doorwayTreatment: "Natural dark-stained timber doorway frame preserved in its exact position opening into a serene warm-toned room",
     flooringUpgrade: "Warm natural oak plank flooring with a textured oatmeal wool rug and an indoor olive tree in a handmade terracotta planter",
-    cameraSpec: "Shot on Sony A7R V, 24mm f/1.4 GM lens, tranquil organic shadows, Architectural Digest Japan aesthetic, 8k photorealistic"
+    cameraSpec: "Shot on Hasselblad H6D-100c, 24mm f/2.8 lens, tranquil organic shadows, Architectural Digest 4K UHD photography, no watermarks or logos"
   }
 };
 
-/**
- * Uploads the user's original room photo to a reliable public CDN
- * so the Image-to-Image model can directly inspect every pixel.
- */
 async function uploadImageToTempCDN(buffer, mimeType) {
   const blob = new Blob([buffer], { type: mimeType || "image/jpeg" });
 
-  // Primary CDN: Catbox.moe
   try {
     const fd1 = new FormData();
     fd1.append("reqtype", "fileupload");
     fd1.append("fileToUpload", blob, "room_input.jpg");
-
     const res1 = await fetch("https://catbox.moe/user/api.php", {
       method: "POST",
       headers: { "User-Agent": "Mozilla/5.0" },
       body: fd1
     });
-
     if (res1.ok) {
       const url1 = (await res1.text()).trim();
-      if (url1.startsWith("https://files.catbox.moe/")) {
-        return url1;
-      }
+      if (url1.startsWith("https://files.catbox.moe/")) return url1;
     }
-  } catch (err) {
-    console.warn("Catbox upload skipped:", err.message);
-  }
+  } catch (_) {}
 
-  // Secondary CDN: Uguu.se
   try {
     const fd2 = new FormData();
     fd2.append("files[]", blob, "room_input.jpg");
-
     const res2 = await fetch("https://uguu.se/upload", {
       method: "POST",
       headers: { "User-Agent": "Mozilla/5.0" },
       body: fd2
     });
-
     if (res2.ok) {
       const json2 = await res2.json();
       const url2 = json2?.files?.[0]?.url;
-      if (url2 && url2.startsWith("http")) {
-        return url2;
-      }
+      if (url2 && url2.startsWith("http")) return url2;
     }
-  } catch (err) {
-    console.warn("Uguu upload skipped:", err.message);
-  }
+  } catch (_) {}
 
-  // Tertiary CDN: Tmpfiles.org
   try {
     const fd3 = new FormData();
     fd3.append("file", blob, "room_input.jpg");
-
     const res3 = await fetch("https://tmpfiles.org/api/v1/upload", {
       method: "POST",
       headers: { "User-Agent": "Mozilla/5.0" },
       body: fd3
     });
-
     if (res3.ok) {
       const json3 = await res3.json();
       const rawUrl = json3?.data?.url;
-      if (rawUrl) {
-        return rawUrl.replace("tmpfiles.org/", "tmpfiles.org/dl/");
-      }
+      if (rawUrl) return rawUrl.replace("tmpfiles.org/", "tmpfiles.org/dl/");
     }
-  } catch (err) {
-    console.warn("Tmpfiles upload skipped:", err.message);
-  }
+  } catch (_) {}
 
   return null;
 }
 
-/**
- * Stage 1: AI Spatial Vision Analyzer
- * Inspects the uploaded photo to lock down exact positions of walls, windows,
- * doorways, and desks so the image generator never hallucinates a different room.
- */
 async function analyzeRoomSpatialLayout(imageBase64, mimeType, apiKey, origin) {
   const fallbackBlueprint =
     "Keep the exact room layout, camera angle, walls, window frame, doorway opening, and desk placement exactly where they appear in the input image.";
@@ -184,9 +143,7 @@ async function analyzeRoomSpatialLayout(imageBase64, mimeType, apiKey, origin) {
             },
             {
               type: "image_url",
-              image_url: {
-                url: `data:${mimeType || "image/jpeg"};base64,${imageBase64}`
-              }
+              image_url: { url: `data:${mimeType || "image/jpeg"};base64,${imageBase64}` }
             }
           ]
         }
@@ -213,22 +170,16 @@ async function analyzeRoomSpatialLayout(imageBase64, mimeType, apiKey, origin) {
         return spatialText.replace(/\n+/g, " ");
       }
     }
-  } catch (err) {
-    console.warn("Spatial vision analyzer fallback triggered:", err.message);
-  }
+  } catch (_) {}
 
   return fallbackBlueprint;
 }
 
-/**
- * Stage 2: Compiles the Spatial Blueprint + 8-Layer Style Specification
- * into a precision Image-to-Image editing prompt.
- */
 function buildMasterArchitecturalPrompt(styleName, spatialLayout) {
   const spec = DESIGN_STYLES_DB[styleName] || DESIGN_STYLES_DB["Cozy Gaming & RGB Desk Setup"];
 
   const promptParts = [
-    `Exact in-place interior renovation of this uploaded room photo.`,
+    `Exact in-place 4K ultra-HD interior renovation of this uploaded room photo.`,
     `STRICT STRUCTURAL LOCK: ${spatialLayout} Do NOT add extra windows, do NOT close or move doorways, do NOT change desk shape or camera perspective.`,
     `WALLS: ${spec.wallTreatment}.`,
     `DESK & TECH: ${spec.deskUpgrade}. ${spec.pcAndTech}.`,
@@ -238,18 +189,14 @@ function buildMasterArchitecturalPrompt(styleName, spatialLayout) {
     `QUALITY: ${spec.cameraSpec}.`
   ];
 
-  // Keep prompt within optimal token window (~650 chars) so Kontext processes 100% of instructions
   return promptParts.join(" ").slice(0, 780);
 }
 
-/**
- * Stage 3: Executes Geometry-Locked Image-to-Image Generation
- */
 async function renderMakeoverImage({ prompt, imageUrl, apiKey, origin, seed }) {
-  // Note: enhance=false is CRITICAL so Pollinations does NOT rewrite our spatial-locked prompt!
+  // High-resolution 2048x1536 (2K/4K grade) first, with 1536x1152 fallback
   const candidateUrls = [
-    `https://gen.pollinations.ai/image/${encodeURIComponent(prompt)}?model=kontext&image=${encodeURIComponent(imageUrl)}&width=1280&height=960&nologo=true&enhance=false&seed=${seed}`,
-    `https://gen.pollinations.ai/image/${encodeURIComponent(prompt)}?model=kontext&image=${encodeURIComponent(imageUrl)}&width=1024&height=768&nologo=true&enhance=false&seed=${seed + 1}`
+    `https://gen.pollinations.ai/image/${encodeURIComponent(prompt)}?model=kontext&image=${encodeURIComponent(imageUrl)}&width=2048&height=1536&quality=100&nologo=true&enhance=false&seed=${seed}`,
+    `https://gen.pollinations.ai/image/${encodeURIComponent(prompt)}?model=kontext&image=${encodeURIComponent(imageUrl)}&width=1536&height=1152&quality=100&nologo=true&enhance=false&seed=${seed + 1}`
   ];
 
   let lastErrorStatus = 500;
@@ -293,9 +240,6 @@ async function renderMakeoverImage({ prompt, imageUrl, apiKey, origin, seed }) {
   };
 }
 
-/**
- * Main POST Handler for /api/makeover
- */
 export async function POST(req) {
   try {
     const body = await req.json();
@@ -319,7 +263,6 @@ export async function POST(req) {
     const imageBuffer = Buffer.from(imageBase64, "base64");
     const seed = Math.floor(Math.random() * 900000) + 100000;
 
-    // Step 1: Upload original room photo to public CDN
     const tempImageUrl = await uploadImageToTempCDN(imageBuffer, mimeType);
     if (!tempImageUrl) {
       return NextResponse.json(
@@ -328,7 +271,6 @@ export async function POST(req) {
       );
     }
 
-    // Step 2: Analyze exact physical room layout via AI Vision
     const spatialLayout = await analyzeRoomSpatialLayout(
       imageBase64,
       mimeType,
@@ -336,10 +278,8 @@ export async function POST(req) {
       origin
     );
 
-    // Step 3: Compile precision 8-layer architectural renovation prompt
     const masterPrompt = buildMasterArchitecturalPrompt(style, spatialLayout);
 
-    // Step 4: Render geometry-locked HD makeover image
     const renderResult = await renderMakeoverImage({
       prompt: masterPrompt,
       imageUrl: tempImageUrl,
