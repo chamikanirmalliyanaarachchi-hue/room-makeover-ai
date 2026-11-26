@@ -4,19 +4,19 @@ export const maxDuration = 60;
 
 const STYLE_PROMPTS = {
   "Cozy Gaming & RGB Desk Setup":
-    "Interior renovation of this exact room photo, keeping every wall, window, doorway, ceiling beam, and furniture position in the exact same place and camera angle. Transform the existing setup into a viral luxury cozy RGB gaming room: replace the desk with a sleek matte-black carbon-fiber gaming desk with glowing cyan and magenta under-desk neon LED strips, upgrade the computer setup with a tempered-glass RGB gaming PC tower, wide curved gaming monitor, mechanical RGB keyboard, oversized glowing desk mat, studio speakers, and a plush black ergonomic racing gaming chair. Upgrade the plain walls with dark walnut vertical acoustic wood-slat panels, glowing hexagonal Nanoleaf RGB wall light panels, and floating wooden shelves with mini plants. Replace old curtains with dark sleek blinds, upgrade the floor to rich dark walnut hardwood with a soft geometric rug, and add warm ambient lighting and indoor plants. Shot on Sony A7R V, crisp HDR studio lighting, 8k photorealistic interior design.",
+    "Renovate this exact room into a luxury cozy RGB gaming setup while keeping the exact room walls, window frame, doorway, ceiling, and furniture positions unchanged. Replace the desk with a sleek matte-black carbon-fiber gaming desk with glowing cyan and magenta under-desk neon strips, a curved gaming monitor, tempered-glass RGB PC tower, mechanical RGB keyboard, studio speakers, and a black ergonomic racing gaming chair. Add dark walnut acoustic wood-slat wall panels, glowing hexagonal RGB wall lights, floating shelves with mini plants, dark sleek window blinds, rich walnut hardwood floor, and warm ambient lighting. Razor-sharp architectural interior photography, 8k UHD.",
 
   "Modern Luxury Aesthetic":
-    "Interior renovation of this exact room photo, keeping every wall, window, doorway, and furniture position in the exact same place and camera perspective. Transform the space into a 5-star Architectural Digest modern luxury workspace: replace the desk with a bespoke fluted walnut and brushed-brass executive desk with concealed warm 3000K golden LED cove lighting, a sleek aluminum workstation monitor, wireless keyboard, and a cognac-leather designer ergonomic office chair. Refinish the walls in warm greige Venetian plaster with subtle vertical wood trim molding and framed minimalist gallery art. Replace old curtains with sheer linen drapes over sleek blackout shades, and upgrade the floor to wide-plank European oak hardwood with a plush cream boucle rug and a sculptural fiddle-leaf fig plant. Shot on Sony A7R V, soft golden-hour daylight and warm accent lamps, 8k photorealistic.",
+    "Renovate this exact room into a 5-star modern luxury designer workspace while keeping the exact room walls, window frame, doorway, and furniture positions unchanged. Replace the desk with a bespoke fluted walnut and brushed-brass executive desk with warm golden under-desk LED cove lighting, sleek aluminum monitor, and cognac-leather designer ergonomic chair. Upgrade walls with warm greige plaster, subtle brass trim molding, framed minimalist gallery art, sheer linen curtains over blackout shades, wide-plank European oak hardwood floor, cream boucle rug, and a fiddle-leaf fig plant. Razor-sharp Architectural Digest photography, 8k UHD.",
 
   "Minimalist Scandinavian":
-    "Interior renovation of this exact room photo, keeping every wall, window, doorway, and furniture position in the exact same place and camera perspective. Transform the room into a bright, serene Scandinavian Nordic workspace: replace the desk with a solid light-ash wood minimalist desk, clean white-and-silver monitor setup, warm minimalist desk lamp, and a white molded Nordic ergonomic chair with light oak legs. Paint walls in warm matte off-white with natural light-oak vertical slats and floating birch shelves holding white ceramic vases, books, and trailing pothos plants. Replace curtains with crisp white linen Roman blinds diffusing soft natural daylight, and upgrade the floor to pale Scandinavian ash planks with a woven natural jute rug and indoor snake plant. Shot on Sony A7R V, soft diffused daylight, 8k photorealistic.",
+    "Renovate this exact room into a bright, serene Scandinavian Nordic workspace while keeping the exact room walls, window frame, doorway, and furniture positions unchanged. Replace the desk with a solid light-ash wood minimalist desk, clean white-and-silver monitor setup, warm minimalist task lamp, and a white molded ergonomic Nordic chair with oak legs. Paint walls warm matte off-white with light-oak vertical slats, floating birch shelves with ceramic vases and trailing pothos plants, white linen Roman blinds, pale ash hardwood floor, woven jute rug, and a snake plant. Soft diffused daylight, razor-sharp 8k UHD.",
 
   "Cyberpunk Neon Studio":
-    "Interior renovation of this exact room photo, keeping every wall, window, doorway, and furniture position in the exact same place and camera perspective. Overhaul the space into a futuristic Cyberpunk Neon Creator Studio: install a heavy matte-black industrial tech desk with dual-tier monitor riser, glowing electric-blue and hot-pink neon edge lighting, dual curved monitors, studio boom-arm microphone, stream deck, liquid-cooled RGB PC tower, and a futuristic ergonomic mesh gaming chair. Cladding the walls in dark geometric acoustic tiles, vertical cyan and magenta neon light tubes, and floating tech shelves. Replace curtains with dark metallic Venetian blinds bathed in neon rim light, and upgrade the floor to dark slate tiles with a neon-trimmed studio mat. Shot on Sony A7R V, cinematic reflections, 8k photorealistic.",
+    "Renovate this exact room into a futuristic Cyberpunk Neon Creator Studio while keeping the exact room walls, window frame, doorway, and furniture positions unchanged. Install a heavy matte-black industrial tech desk with electric-blue and hot-pink neon edge lighting, dual curved monitors, boom-arm microphone, liquid-cooled RGB PC tower, and futuristic ergonomic gaming chair. Add dark geometric acoustic wall tiles, vertical cyan and magenta neon light tubes, dark metallic window blinds with neon rim glow, and dark slate tile flooring with a neon-accented rug. Razor-sharp cinematic lighting, 8k UHD.",
 
   "Warm Japandi & Wood Aesthetic":
-    "Interior renovation of this exact room photo, keeping every wall, window, doorway, and furniture position in the exact same place and camera perspective. Rebuild the space with tranquil Japandi craftsmanship: replace the desk with a handcrafted dark-stained oak desk with warm hidden LED cove lighting, a curved solid-wood and woven-cane ergonomic chair with linen cushion, clean dark-bezel monitor, walnut wrist rest, and matte-black minimalist lamp. Refinish walls in textured warm beige limewash plaster with vertical cedar wood slats and framed Japanese sumi-e artwork. Replace curtains with natural woven bamboo shades filtering warm golden sunlight, and upgrade the floor to warm natural oak planks with a neutral wool rug and an indoor olive tree in a terracotta pot. Shot on Sony A7R V, peaceful organic shadows, 8k photorealistic."
+    "Renovate this exact room into a tranquil Japandi interior workspace while keeping the exact room walls, window frame, doorway, and furniture positions unchanged. Replace the desk with a handcrafted dark-stained oak desk with warm hidden LED lighting, curved solid-wood and woven-cane ergonomic chair with linen cushion, clean dark-bezel monitor, and matte-black minimalist lamp. Finish walls in textured warm beige limewash plaster with vertical cedar wood slats, framed Japanese art, natural woven bamboo window shades, warm oak plank flooring, neutral wool rug, and an indoor olive tree. Razor-sharp 8k UHD."
 };
 
 async function uploadTempImage(buffer, mimeType) {
@@ -75,43 +75,30 @@ export async function POST(req) {
 
     const detailedPrompt =
       STYLE_PROMPTS[style] ||
-      `Interior renovation of this exact room photo, keeping every wall, window, doorway, and furniture position in the exact same place and camera angle. Transform the space into a ${style} with high-end designer furniture, rich wall textures, plants, and warm architectural LED lighting, shot on Sony A7R V, 8k photorealistic.`;
+      `Renovate this exact room into a ${style} while keeping the exact room walls, window frame, doorway, and furniture positions unchanged. Upgrade the desk, chair, curtains, wall finishes, floor, and lighting with high-end designer furniture, plants, and warm architectural LED lighting. Razor-sharp 8k UHD interior photography.`;
 
     const origin = req.headers.get("origin") || "https://room-makeover-ai-nu.vercel.app";
 
-    // Kontext first for 100% strict spatial/architecture preservation, Seedream/GPT-Image as backup
-    const endpoints = [
-      `https://gen.pollinations.ai/image/${encodeURIComponent(detailedPrompt)}?model=kontext&image=${encodeURIComponent(tempImageUrl)}&width=1024&height=768&nologo=true&seed=${seed}`,
-      `https://gen.pollinations.ai/image/${encodeURIComponent(detailedPrompt)}?model=seedream&image=${encodeURIComponent(tempImageUrl)}&width=1024&height=768&nologo=true&seed=${seed}`
-    ];
+    // Strict Kontext Image-to-Image at HD 1536x1152 resolution (never switches room layout)
+    const apiUrl = `https://gen.pollinations.ai/image/${encodeURIComponent(detailedPrompt)}?model=kontext&image=${encodeURIComponent(tempImageUrl)}&width=1536&height=1152&nologo=true&enhance=true&seed=${seed}`;
 
-    let lastStatus = 500;
-    let lastMsg = "Busy";
-
-    for (const url of endpoints) {
-      const res = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          Origin: origin,
-          Referer: `${origin}/`,
-          "User-Agent": "Mozilla/5.0"
-        }
-      });
-      const contentType = res.headers.get("content-type") || "";
-
-      if (res.ok && contentType.startsWith("image/")) {
-        const arr = await res.arrayBuffer();
-        return NextResponse.json({ resultImage: `data:image/jpeg;base64,${Buffer.from(arr).toString("base64")}` });
+    const res = await fetch(apiUrl, {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        Origin: origin,
+        Referer: `${origin}/`,
+        "User-Agent": "Mozilla/5.0"
       }
+    });
 
-      lastStatus = res.status;
-      lastMsg = (await res.text()).slice(0, 140);
+    const contentType = res.headers.get("content-type") || "";
+    if (res.ok && contentType.startsWith("image/")) {
+      const arr = await res.arrayBuffer();
+      return NextResponse.json({ resultImage: `data:image/jpeg;base64,${Buffer.from(arr).toString("base64")}` });
     }
 
-    return NextResponse.json(
-      { error: `Image-to-Image (${lastStatus}): ${lastMsg}` },
-      { status: 500 }
-    );
+    const errText = (await res.text()).slice(0, 160);
+    return NextResponse.json({ error: `Kontext (${res.status}): ${errText}` }, { status: 500 });
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
