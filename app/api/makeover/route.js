@@ -3,55 +3,34 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     const { imageBase64, mimeType, style } = await req.json();
-    const hfToken = process.env.HF_TOKEN;
 
-    // 1. Analyze the uploaded room layout using Hugging Face Vision (which already works on your token!)
-    let roomDetails = "a cozy bedroom and computer desk setup next to a window and doorway";
-    if (hfToken) {
-      try {
-        const visionRes = await fetch("https://router.huggingface.co/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${hfToken}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            model: "Qwen/Qwen2.5-VL-7B-Instruct",
-            messages: [
-              {
-                role: "user",
-                content: [
-                  {
-                    type: "text",
-                    text: "Describe the exact layout, computer desk, window, door, walls, and camera perspective of this room in 35 words so an interior designer can recreate the exact same room."
-                  },
-                  {
-                    type: "image_url",
-                    image_url: { url: `data:${mimeType || "image/jpeg"};base64,${imageBase64}` }
-                  }
-                ]
-              }
-            ],
-            max_tokens: 100
-          })
-        });
+    // 1. Host the temporary input image briefly so Kontext Image-to-Image model can read exact room geometry
+    const formData = new FormData();
+    const buffer = Buffer.from(imageBase64, "base64");
+    const blob = new Blob([buffer], { type: mimeType || "image/jpeg" });
+    formData.append("reqtype", "fileupload");
+    formData.append("time", "1h");
+    formData.append("fileToUpload", blob, "room.jpg");
 
-        if (visionRes.ok) {
-          const visionData = await visionRes.json();
-          const desc = visionData?.choices?.[0]?.message?.content;
-          if (desc) roomDetails = desc;
-        }
-      } catch (_) {}
+    const uploadRes = await fetch("https://litterbox.catbox.moe/resources/internals/api.php", {
+      method: "POST",
+      body: formData
+    });
+
+    const tempImageUrl = (await uploadRes.text()).trim();
+    if (!tempImageUrl.startsWith("http")) {
+      return NextResponse.json({ error: "Could not process uploaded image. Try again." }, { status: 500 });
     }
 
-    // 2. Generate the redesigned room image using Pollinations Flux (100% Free, Zero Billing)
-    const prompt = `Ultra-realistic interior design photography of ${roomDetails}, completely redesigned in a ${style} aesthetic, upgraded modern furniture, warm ambient LED lighting, indoor plants, cozy textures, architectural digest style, 8k photorealistic`;
-    const seed = Math.floor(Math.random() * 1000000);
-    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1024&height=768&model=flux&nologo=true&seed=${seed}`;
+    // 2. Real Image-to-Image Makeover using FLUX Kontext (keeps exact walls, desk, window, door & PC position)
+    const prompt = `Keep the exact same room layout, camera angle, window position, doorway position, and computer desk placement from this photo, but completely renovate and upgrade it into an ultra-realistic ${style}. Replace old curtains with modern designer blinds, upgrade the desk, chair, PC setup, wall finishes, floor, and add warm architectural LED lighting, indoor plants, and luxury decor. Photorealistic 8k interior design photography.`;
 
-    const imgRes = await fetch(imageUrl);
+    const seed = Math.floor(Math.random() * 1000000);
+    const apiUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=kontext&image=${encodeURIComponent(tempImageUrl)}&width=1024&height=768&nologo=true&seed=${seed}`;
+
+    const imgRes = await fetch(apiUrl);
     if (!imgRes.ok) {
-      return NextResponse.json({ error: "Image generator busy, please try again in 5 seconds." }, { status: 500 });
+      return NextResponse.json({ error: "AI designer is busy right now. Please click Generate again." }, { status: 500 });
     }
 
     const arrayBuffer = await imgRes.arrayBuffer();
