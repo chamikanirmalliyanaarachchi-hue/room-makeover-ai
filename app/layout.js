@@ -28,6 +28,9 @@ export default function RootLayout({ children }) {
         <Script id="monetag-inpage-push" strategy="afterInteractive">
           {`(function(s){s.dataset.zone='12365892',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`}
         </Script>
+        <Script id="monetag-vignette-banner" strategy="afterInteractive">
+          {`(function(s){s.dataset.zone='12365951',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`}
+        </Script>
       </body>
     </html>
   );
