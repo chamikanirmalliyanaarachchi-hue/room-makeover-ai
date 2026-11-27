@@ -10,7 +10,7 @@ export const metadata = {
     "before and after room AI"
   ],
   verification: {
-    google: "weFk2Vahk3mQ8fswgukIraKWnB"
+    google: "weFk2Vahk3mQ8fswgukIraKWnBjSRFPDkuGqw4bVX6Y"
   }
 };
 
