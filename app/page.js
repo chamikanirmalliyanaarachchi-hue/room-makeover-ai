@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 // Replace with your real Amazon Associates Tracking ID when ready
-const AMAZON_TAG = "roommakeover-20";
+const AMAZON_TAG = "roomcraftai0e-20";
 
 /**
  * ============================================================================
