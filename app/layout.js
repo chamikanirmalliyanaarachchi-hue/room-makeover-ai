@@ -12,7 +12,8 @@ export const metadata = {
   verification: {
     google: "weFk2Vahk3mQ8fswgukIraKWnB",
     other: {
-      "p:domain_verify": "d0596eb081057332bf1a6e1a66078b23"
+      "p:domain_verify": "d0596eb081057332bf1a6e1a66078b23",
+      "monetag": "4a3eb29afdf471c77e7b9e13a07bad05"
     }
   }
 };
