@@ -6,9 +6,6 @@ export const maxDuration = 60;
  * ============================================================================
  * AI ROOM & DESK MAKEOVER - CLOUDFLARE WORKERS AI ENGINE (100% FREE TIER)
  * ============================================================================
- * - 10,000 Free Neurons daily (no credit card / billing required)
- * - Direct Image-to-Image transformation with structure preservation
- * ============================================================================
  */
 
 const STYLE_PROMPTS = {
@@ -50,7 +47,6 @@ export async function POST(req) {
       );
     }
 
-    // Convert Base64 image to byte array required by Cloudflare Workers AI Img2Img
     const imageBuffer = Buffer.from(imageBase64, "base64");
     const imageBytes = Array.from(new Uint8Array(imageBuffer));
 
@@ -86,7 +82,6 @@ export async function POST(req) {
       );
     }
 
-    // Cloudflare returns raw PNG binary bytes directly
     const outBuffer = await cfRes.arrayBuffer();
     const outBase64 = Buffer.from(outBuffer).toString("base64");
 
