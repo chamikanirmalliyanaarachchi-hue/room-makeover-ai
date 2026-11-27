@@ -1,3 +1,5 @@
+import Script from "next/script";
+
 export const metadata = {
   title: "RoomCraft AI Architect — Free AI Room & Desk Setup Makeover",
   description:
@@ -21,7 +23,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body style={{ backgroundColor: "#05070D", margin: 0 }}>{children}</body>
+      <body style={{ backgroundColor: "#05070D", margin: 0 }}>
+        {children}
+        <Script id="monetag-inpage-push" strategy="afterInteractive">
+          {`(function(s){s.dataset.zone='12365892',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`}
+        </Script>
+      </body>
     </html>
   );
 }
