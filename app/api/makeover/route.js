@@ -4,79 +4,30 @@ export const maxDuration = 60;
 
 /**
  * ============================================================================
- * AI ROOM & DESK MAKEOVER - CLOUDFLARE WORKERS AI (2026 ACTIVE MODELS)
+ * AI ROOM & DESK MAKEOVER - CLOUDFLARE FLUX IMAGE-TO-IMAGE EDITOR (100% FREE)
  * ============================================================================
- * 1. @cf/meta/llama-3.2-11b-vision-instruct (Spatial Layout Scanner)
- * 2. @cf/black-forest-labs/flux-1-schnell (Primary HD Renderer)
- * 3. @cf/leonardo/lucid-origin (2026 High-Res Backup Renderer)
- * 4. @cf/bytedance/stable-diffusion-xl-lightning (Fast Fallback)
+ * - Passes the ACTUAL uploaded room pixels directly into Cloudflare's
+ *   Image-to-Image editing models so the exact room geometry, walls, windows,
+ *   doorways, and desk layout are 100% preserved in-place.
  * ============================================================================
  */
 
 const STYLE_PROMPTS = {
   "Cozy Gaming & RGB Desk Setup":
-    "Luxury cozy RGB gaming bedroom desk setup, dark charcoal acoustic wood-slat wall panels, glowing hexagonal RGB wall lights, sleek black gaming desk with cyan and magenta under-desk neon LED strips, curved gaming monitor, tempered-glass RGB PC tower, mechanical RGB keyboard, black racing gaming chair, dark window blinds, walnut wood floor, warm ambient lighting, Architectural Digest 8k photorealistic",
+    "Edit this exact room photo in-place into a luxury cozy RGB gaming room while keeping the exact room geometry, walls, window, doorway, and desk placement unchanged. Upgrade walls with dark matte charcoal acoustic wood-slat panels and glowing hexagonal RGB wall lights. Upgrade the desk into a sleek matte-black gaming desk with cyan and magenta under-desk neon LED strips, curved gaming monitor, tempered-glass RGB PC tower, mechanical RGB keyboard, and black racing gaming chair. Add dark window blinds, walnut hardwood floor, and warm ambient lighting. 8k photorealistic interior photography.",
 
   "Modern Luxury Aesthetic":
-    "5-star modern luxury designer workspace, warm greige Venetian plaster walls with brushed-brass trim molding, fluted walnut executive desk with warm 3000K golden LED cove lighting, sleek aluminum monitor, cognac-leather designer ergonomic chair, sheer linen drapes, European oak herringbone wood floor, cream boucle rug, indoor fiddle-leaf fig plant, Architectural Digest 8k photorealistic",
+    "Edit this exact room photo in-place into a 5-star modern luxury designer workspace while keeping the exact room geometry, walls, window, doorway, and desk placement unchanged. Upgrade walls with warm greige Venetian plaster and brushed-brass trim molding. Upgrade the desk into a fluted walnut executive desk with warm 3000K golden LED cove lighting, sleek aluminum workstation monitor, and cognac-leather designer ergonomic chair. Add sheer linen drapes, European oak herringbone wood floor, cream boucle rug, and indoor fiddle-leaf fig plant. Architectural Digest 8k photorealistic.",
 
   "Minimalist Scandinavian":
-    "Bright serene Scandinavian Nordic workspace, warm matte alabaster-white walls with light-oak vertical wood slats, floating birch shelves with ceramic vases and pothos plants, solid light-ash wood minimalist desk, clean white-and-silver computer setup, white ergonomic Nordic chair with oak legs, white linen Roman blinds, pale ash hardwood floor, woven jute rug, indoor snake plant, Kinfolk 8k photorealistic",
+    "Edit this exact room photo in-place into a bright serene Scandinavian Nordic workspace while keeping the exact room geometry, walls, window, doorway, and desk placement unchanged. Upgrade walls with warm matte alabaster-white paint, light-oak vertical wood slats, and floating birch shelves with ceramic vases and trailing pothos plants. Upgrade the desk into a solid light-ash wood minimalist desk with white-and-silver computer setup and white molded ergonomic Nordic chair with oak legs. Add white linen Roman blinds, pale ash hardwood floor, woven jute rug, and snake plant. 8k photorealistic.",
 
   "Cyberpunk Neon Studio":
-    "Futuristic Cyberpunk Neon Creator Studio, matte-black 3D geometric acoustic wall tiles, vertical glowing electric-blue and hot-pink neon light tubes, heavy matte-black industrial tech desk with neon edge trim, dual curved gaming monitors, studio boom-arm microphone, liquid-cooled RGB PC tower, futuristic ergonomic gaming chair, dark metallic blinds with neon rim glow, dark slate tile floor, 8k photorealistic",
+    "Edit this exact room photo in-place into a futuristic Cyberpunk Neon Creator Studio while keeping the exact room geometry, walls, window, doorway, and desk placement unchanged. Upgrade walls with matte-black 3D geometric acoustic tiles and vertical glowing electric-blue and hot-pink neon light tubes. Upgrade the desk into a heavy matte-black industrial tech desk with neon edge trim, curved gaming monitor, boom-arm microphone, liquid-cooled RGB PC tower, and futuristic ergonomic gaming chair. Add dark metallic blinds with neon rim glow and dark slate tile floor. 8k photorealistic.",
 
   "Warm Japandi & Wood Aesthetic":
-    "Tranquil Japandi Japanese-Scandinavian workspace, textured warm beige limewash plaster walls with vertical cedar wood slats, framed minimalist Japanese art, handcrafted dark-stained oak desk with warm hidden LED cove lighting, curved solid-wood and woven-cane chair with linen cushion, clean dark-bezel monitor, woven bamboo window shades, warm oak plank floor, neutral wool rug, indoor olive tree, 8k photorealistic"
+    "Edit this exact room photo in-place into a tranquil Japandi Japanese-Scandinavian workspace while keeping the exact room geometry, walls, window, doorway, and desk placement unchanged. Upgrade walls with textured warm beige limewash plaster, vertical cedar wood slats, and framed minimalist Japanese ink art. Upgrade the desk into a handcrafted dark-stained oak desk with warm hidden LED cove lighting, curved solid-wood and woven-cane chair with linen cushion, and clean dark-bezel monitor. Add woven bamboo window shades, warm oak plank floor, neutral wool rug, and indoor olive tree. 8k photorealistic."
 };
-
-async function scanRoomGeometry(accountId, apiToken, imageBase64, mimeType) {
-  const defaultLayout =
-    "Medium-wide interior view of a cozy bedroom desk corner with a computer desk against the wall, monitor and PC tower on the desk, chair in front, window and doorway in their original positions";
-
-  try {
-    const res = await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/meta/llama-3.2-11b-vision-instruct`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiToken}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          messages: [
-            {
-              role: "system",
-              content:
-                "Describe the exact spatial layout and camera angle of this room in 35 words or less (positions of desk, PC, chair, window, doorway, bed, wall objects) so an interior designer recreates the exact same room perspective."
-            },
-            {
-              role: "user",
-              content: [
-                { type: "text", text: "Describe exact room layout and camera angle:" },
-                {
-                  type: "image_url",
-                  image_url: { url: `data:${mimeType || "image/jpeg"};base64,${imageBase64}` }
-                }
-              ]
-            }
-          ],
-          max_tokens: 80
-        })
-      }
-    );
-
-    if (res.ok) {
-      const json = await res.json();
-      const text = json?.result?.response || json?.choices?.[0]?.message?.content;
-      if (text && text.trim().length > 15) {
-        return text.trim().replace(/\n+/g, " ").slice(0, 220);
-      }
-    }
-  } catch (_) {}
-
-  return defaultLayout;
-}
 
 export async function POST(req) {
   try {
@@ -97,94 +48,62 @@ export async function POST(req) {
       );
     }
 
-    const roomStructure = await scanRoomGeometry(accountId, apiToken, imageBase64, mimeType);
-
-    const styleDescription =
+    const prompt =
       STYLE_PROMPTS[style] ||
-      `Luxury interior room renovation in ${style} style, designer furniture, modern wall panels, warm LED lighting, hardwood flooring, indoor plants, 8k photorealistic interior photography`;
-
-    const finalPrompt = `Interior design makeover of this exact room layout (${roomStructure}). Transformed into: ${styleDescription}`;
+      `Edit this exact room photo in-place into a ${style} while keeping the exact room geometry, walls, window, doorway, and desk placement unchanged. Upgrade furniture, wall panels, lighting, and flooring into high-end 8k photorealistic interior design.`;
 
     const errorsLog = [];
 
-    // 1. Primary: Black Forest Labs FLUX.1-schnell (num_steps max 8, 4 is optimal)
+    // 1. Primary: FLUX.2 Klein 4B (Cloudflare 2026 Native Image-to-Image Editor via multipart/form-data)
     try {
-      const fluxRes = await fetch(
-        `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/black-forest-labs/flux-1-schnell`,
+      const imageBuffer = Buffer.from(imageBase64, "base64");
+      const imageBlob = new Blob([imageBuffer], { type: mimeType || "image/jpeg" });
+
+      const formData = new FormData();
+      formData.append("prompt", prompt);
+      formData.append("input_image_0", imageBlob, "room.jpg");
+      formData.append("steps", "4");
+
+      const kleinRes = await fetch(
+        `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/black-forest-labs/flux-2-klein-4b`,
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${apiToken}`,
-            "Content-Type": "application/json"
+            Authorization: `Bearer ${apiToken}`
           },
-          body: JSON.stringify({
-            prompt: finalPrompt,
-            steps: 4
-          })
+          body: formData
         }
       );
 
-      if (fluxRes.ok) {
-        const fluxJson = await fluxRes.json();
-        const base64Img = fluxJson?.result?.image;
-        if (base64Img) {
-          return NextResponse.json({
-            resultImage: `data:image/jpeg;base64,${base64Img}`,
-            detectedLayout: roomStructure
-          });
-        }
-      } else {
-        errorsLog.push(`FLUX (${fluxRes.status}): ${(await fluxRes.text()).slice(0, 120)}`);
-      }
-    } catch (e) {
-      errorsLog.push(`FLUX err: ${e.message}`);
-    }
-
-    // 2. Backup: Leonardo Lucid Origin (2026 active Cloudflare model)
-    try {
-      const lucidRes = await fetch(
-        `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/leonardo/lucid-origin`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${apiToken}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            prompt: finalPrompt
-          })
-        }
-      );
-
-      if (lucidRes.ok) {
-        const cType = lucidRes.headers.get("content-type") || "";
+      if (kleinRes.ok) {
+        const cType = kleinRes.headers.get("content-type") || "";
         if (cType.includes("application/json")) {
-          const lucidJson = await lucidRes.json();
-          const b64 = lucidJson?.result?.image;
+          const json = await kleinRes.json();
+          const b64 = json?.result?.image;
           if (b64) {
             return NextResponse.json({
               resultImage: `data:image/jpeg;base64,${b64}`,
-              detectedLayout: roomStructure
+              model: "flux-2-klein-4b"
             });
           }
         } else {
-          const buf = await lucidRes.arrayBuffer();
+          const buf = await kleinRes.arrayBuffer();
           return NextResponse.json({
             resultImage: `data:image/png;base64,${Buffer.from(buf).toString("base64")}`,
-            detectedLayout: roomStructure
+            model: "flux-2-klein-4b"
           });
         }
       } else {
-        errorsLog.push(`Lucid (${lucidRes.status}): ${(await lucidRes.text()).slice(0, 120)}`);
+        errorsLog.push(`FLUX2-Klein (${kleinRes.status}): ${(await kleinRes.text()).slice(0, 140)}`);
       }
     } catch (e) {
-      errorsLog.push(`Lucid err: ${e.message}`);
+      errorsLog.push(`FLUX2-Klein err: ${e.message}`);
     }
 
-    // 3. Fallback: ByteDance SDXL Lightning (2026 active fast model)
+    // 2. Secondary: FLUX.1 Kontext Dev on Cloudflare (Direct Image-to-Image Context Editing)
     try {
-      const sdxlRes = await fetch(
-        `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/bytedance/stable-diffusion-xl-lightning`,
+      const kontextRes = await fetch(
+        `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/black-forest-labs/flux-1-kontext-dev`,
         {
           method: "POST",
           headers: {
@@ -192,31 +111,45 @@ export async function POST(req) {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            prompt: finalPrompt
+            prompt: prompt,
+            image: imageBase64,
+            steps: 20
           })
         }
       );
 
-      if (sdxlRes.ok) {
-        const outBuffer = await sdxlRes.arrayBuffer();
-        return NextResponse.json({
-          resultImage: `data:image/png;base64,${Buffer.from(outBuffer).toString("base64")}`,
-          detectedLayout: roomStructure
-        });
+      if (kontextRes.ok) {
+        const cType = kontextRes.headers.get("content-type") || "";
+        if (cType.includes("application/json")) {
+          const json = await kontextRes.json();
+          const b64 = json?.result?.image;
+          if (b64) {
+            return NextResponse.json({
+              resultImage: `data:image/jpeg;base64,${b64}`,
+              model: "flux-1-kontext-dev"
+            });
+          }
+        } else {
+          const buf = await kontextRes.arrayBuffer();
+          return NextResponse.json({
+            resultImage: `data:image/png;base64,${Buffer.from(buf).toString("base64")}`,
+            model: "flux-1-kontext-dev"
+          });
+        }
       } else {
-        errorsLog.push(`Lightning (${sdxlRes.status}): ${(await sdxlRes.text()).slice(0, 120)}`);
+        errorsLog.push(`Kontext-CF (${kontextRes.status}): ${(await kontextRes.text()).slice(0, 140)}`);
       }
     } catch (e) {
-      errorsLog.push(`Lightning err: ${e.message}`);
+      errorsLog.push(`Kontext-CF err: ${e.message}`);
     }
 
     return NextResponse.json(
-      { error: `Cloudflare AI Error: ${errorsLog.join(" | ")}` },
+      { error: `Cloudflare Img2Img Error: ${errorsLog.join(" | ")}` },
       { status: 500 }
     );
   } catch (err) {
     return NextResponse.json(
-      { error: err.message || "Unexpected error during Cloudflare room makeover." },
+      { error: err.message || "Unexpected error during Cloudflare image editing." },
       { status: 500 }
     );
   }
