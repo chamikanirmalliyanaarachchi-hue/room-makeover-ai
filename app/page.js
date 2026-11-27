@@ -1918,6 +1918,27 @@ export default function Home() {
             ))}
           </div>
         </section>
+              <footer
+          style={{
+            marginTop: "36px",
+            paddingTop: "24px",
+            borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "12px",
+            fontSize: "12px",
+            color: "#64748b"
+          }}
+        >
+          <span>© 2026 RoomCraft AI Architect. All rights reserved.</span>
+          <div style={{ display: "flex", gap: "18px" }}>
+            <a href="/privacy" style={{ color: "#94a3b8", textDecoration: "none" }}>
+              Privacy Policy & Affiliate Disclosure
+            </a>
+          </div>
+        </footer>
       </main>
     </div>
   );
