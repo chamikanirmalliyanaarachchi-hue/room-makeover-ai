@@ -10,7 +10,10 @@ export const metadata = {
     "gaming desk setup generator",
     "room redesign AI",
     "before and after room AI"
-  ]
+  ],
+  verification: {
+    google: "weFk2Vahk3mQ8fswgukIraKWnB"
+  }
 };
 
 export default function RootLayout({ children }) {
