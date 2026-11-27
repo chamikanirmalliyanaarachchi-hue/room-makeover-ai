@@ -71,10 +71,16 @@ const Icons = {
     </svg>
   ),
   Download: () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
       <polyline points="7 10 12 15 17 10" />
       <line x1="12" y1="15" x2="12" y2="3" />
+    </svg>
+  ),
+  PinCollage: () => (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="4" y="2" width="16" height="20" rx="2" />
+      <line x1="4" y1="12" x2="20" y2="12" />
     </svg>
   ),
   SplitView: () => (
@@ -96,6 +102,30 @@ const Icons = {
       <path d="M16 10a4 4 0 0 1-8 0" />
     </svg>
   ),
+  Palette: () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" />
+      <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" />
+      <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" />
+      <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" />
+      <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" />
+    </svg>
+  ),
+  Copy: () => (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+    </svg>
+  ),
+  Share: () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="18" cy="5" r="3" />
+      <circle cx="6" cy="12" r="3" />
+      <circle cx="18" cy="19" r="3" />
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+    </svg>
+  ),
   ArrowUpRight: () => (
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
       <line x1="7" y1="17" x2="17" y2="7" />
@@ -113,6 +143,13 @@ const Icons = {
       <polyline points="18 8 22 12 18 16" />
       <polyline points="6 8 2 12 6 16" />
       <line x1="2" y1="12" x2="22" y2="12" />
+    </svg>
+  ),
+  History: () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+      <path d="M3 3v5h5" />
+      <path d="M12 7v5l4 2" />
     </svg>
   )
 };
@@ -160,11 +197,29 @@ const STYLES = [
   }
 ];
 
+const ROOM_TYPES = ["Gaming & Desk Setup", "Bedroom", "Home Office", "Living Room"];
+const BUDGET_TIERS = ["Budget ($100-$300)", "Mid-Range ($300-$800)", "Luxury ($1000+)"];
+
 const LOADING_PHASES = [
   { step: "01", title: "Spatial Geometry Lock", desc: "Mapping existing walls, window frames, doorways & desk bounds..." },
   { step: "02", title: "Architectural Material Synthesis", desc: "Applying high-density wood slats, plaster & surface textures..." },
   { step: "03", title: "Photometric Lighting Pass", desc: "Calculating ray-traced indirect LED & natural daylight reflections..." },
-  { step: "04", title: "AI Product Sourcing", desc: "Matching furniture & lighting fixtures across global retailers..." }
+  { step: "04", title: "AI Product & Color Sourcing", desc: "Extracting paint HEX codes & matching global furniture listings..." }
+];
+
+const FAQ_ITEMS = [
+  {
+    q: "Does RoomCraft AI keep my exact room dimensions, windows, and doors?",
+    a: "Yes. Unlike generic text-to-image tools, our spatial image-to-image engine preserves your exact wall angles, window placement, doorway openings, and furniture footprint while upgrading finishes in-place."
+  },
+  {
+    q: "How does the AI Bill of Materials & Retailer Finder work?",
+    a: "Every generated room design is analyzed in parallel to identify matching furniture, acoustic panels, and LED lighting fixtures, complete with estimated pricing and direct links to Amazon, AliExpress, Temu, and IKEA."
+  },
+  {
+    q: "Can I export Before & After images for Pinterest or TikTok?",
+    a: "Yes. Alongside full-resolution single image exports, you can generate a 1000x1500 vertical Before & After comparison collage ready for Pinterest pins, Instagram Reels, or client moodboards."
+  }
 ];
 
 export default function Home() {
@@ -172,13 +227,23 @@ export default function Home() {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [compressedBase64, setCompressedBase64] = useState(null);
   const [selectedStyle, setSelectedStyle] = useState(STYLES[0].id);
+  const [roomType, setRoomType] = useState(ROOM_TYPES[0]);
+  const [budgetTier, setBudgetTier] = useState(BUDGET_TIERS[1]);
   const [customNotes, setCustomNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [phaseIdx, setPhaseIdx] = useState(0);
   const [resultImage, setResultImage] = useState(null);
   const [products, setProducts] = useState([]);
+  const [palette, setPalette] = useState([]);
+  const [copiedHex, setCopiedHex] = useState(null);
   const [error, setError] = useState(null);
+
+  // Credits & Bonus Share Unlock
   const [creditsLeft, setCreditsLeft] = useState(2);
+  const [bonusClaimed, setBonusClaimed] = useState(false);
+
+  // Local Studio History (last 3 renders)
+  const [history, setHistory] = useState([]);
 
   // Interactive Compare Slider state
   const [sliderPos, setSliderPos] = useState(50);
@@ -190,14 +255,24 @@ export default function Home() {
     const today = new Date().toDateString();
     const savedDate = localStorage.getItem("rm_date");
     const savedCount = parseInt(localStorage.getItem("rm_count") || "0", 10);
+    const savedBonus = localStorage.getItem("rm_bonus") === "true";
 
     if (savedDate !== today) {
       localStorage.setItem("rm_date", today);
       localStorage.setItem("rm_count", "0");
+      localStorage.setItem("rm_bonus", "false");
       setCreditsLeft(2);
+      setBonusClaimed(false);
     } else {
-      setCreditsLeft(Math.max(0, 2 - savedCount));
+      const maxDaily = savedBonus ? 3 : 2;
+      setBonusClaimed(savedBonus);
+      setCreditsLeft(Math.max(0, maxDaily - savedCount));
     }
+
+    try {
+      const savedHistory = JSON.parse(localStorage.getItem("rm_history") || "[]");
+      if (Array.isArray(savedHistory)) setHistory(savedHistory);
+    } catch (_) {}
   }, []);
 
   useEffect(() => {
@@ -216,6 +291,7 @@ export default function Home() {
     setSelectedFile(file);
     setResultImage(null);
     setProducts([]);
+    setPalette([]);
     setError(null);
 
     const reader = new FileReader();
@@ -249,6 +325,21 @@ export default function Home() {
     reader.readAsDataURL(file);
   };
 
+  const handleUnlockBonusCredit = () => {
+    if (bonusClaimed) return;
+    const shareText = encodeURIComponent(
+      "Transform your bedroom or desk setup in 10 seconds with RoomCraft AI Architect:"
+    );
+    const shareUrl = encodeURIComponent(window.location.href);
+    window.open(`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`, "_blank");
+
+    localStorage.setItem("rm_bonus", "true");
+    setBonusClaimed(true);
+    const used = parseInt(localStorage.getItem("rm_count") || "0", 10);
+    setCreditsLeft(Math.max(0, 3 - used));
+    setError(null);
+  };
+
   const handleGenerate = async () => {
     if (!compressedBase64) {
       setError("Please upload a photograph of your room or workspace first.");
@@ -256,7 +347,7 @@ export default function Home() {
     }
 
     if (creditsLeft <= 0) {
-      setError("Daily free quota reached (2/2 renders). Your credits will automatically reset tomorrow.");
+      setError("Daily free quota reached. Share RoomCraft AI below to unlock +1 bonus render today.");
       return;
     }
 
@@ -271,6 +362,8 @@ export default function Home() {
           imageBase64: compressedBase64,
           mimeType: "image/jpeg",
           style: selectedStyle,
+          roomType,
+          budgetTier,
           customNotes
         })
       });
@@ -282,16 +375,45 @@ export default function Home() {
 
       setResultImage(data.resultImage);
       setProducts(data.products || []);
+      setPalette(data.palette || []);
       setSliderPos(50);
 
       const used = parseInt(localStorage.getItem("rm_count") || "0", 10) + 1;
       localStorage.setItem("rm_count", used.toString());
-      setCreditsLeft(Math.max(0, 2 - used));
+      const maxDaily = bonusClaimed ? 3 : 2;
+      setCreditsLeft(Math.max(0, maxDaily - used));
+
+      // Save to Recent Studio Renders (max 3 items)
+      const newEntry = {
+        id: Date.now(),
+        style: selectedStyle,
+        roomType,
+        before: previewUrl,
+        after: data.resultImage,
+        products: data.products || [],
+        palette: data.palette || []
+      };
+      const updatedHistory = [newEntry, ...history].slice(0, 3);
+      setHistory(updatedHistory);
+      try {
+        localStorage.setItem("rm_history", JSON.stringify(updatedHistory));
+      } catch (_) {}
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  const loadFromHistory = (entry) => {
+    setSelectedStyle(entry.style);
+    if (entry.roomType) setRoomType(entry.roomType);
+    setPreviewUrl(entry.before);
+    setResultImage(entry.after);
+    setProducts(entry.products || []);
+    setPalette(entry.palette || []);
+    setSliderPos(50);
+    window.scrollTo({ top: 320, behavior: "smooth" });
   };
 
   const updateSliderFromClientX = (clientX) => {
@@ -301,7 +423,7 @@ export default function Home() {
     setSliderPos(Math.round((x / rect.width) * 100));
   };
 
-  const handleDownload = () => {
+  const handleDownloadHD = () => {
     if (!resultImage) return;
     const link = document.createElement("a");
     link.href = resultImage;
@@ -309,6 +431,87 @@ export default function Home() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  /**
+   * Generates a 1000x1500 Vertical Pinterest Before & After Collage on Client Canvas
+   */
+  const handleDownloadPinterestCollage = () => {
+    if (!previewUrl || !resultImage) return;
+
+    const imgBefore = new Image();
+    const imgAfter = new Image();
+    imgBefore.crossOrigin = "anonymous";
+    imgAfter.crossOrigin = "anonymous";
+
+    imgBefore.onload = () => {
+      imgAfter.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = 1000;
+        canvas.height = 1500;
+        const ctx = canvas.getContext("2d");
+
+        // Dark architectural frame
+        ctx.fillStyle = "#05070D";
+        ctx.fillRect(0, 0, 1000, 1500);
+
+        const drawCover = (img, x, y, w, h) => {
+          const scale = Math.max(w / img.width, h / img.height);
+          const nw = img.width * scale;
+          const nh = img.height * scale;
+          ctx.save();
+          ctx.beginPath();
+          ctx.roundRect(x, y, w, h, 24);
+          ctx.clip();
+          ctx.drawImage(img, x + (w - nw) / 2, y + (h - nh) / 2, nw, nh);
+          ctx.restore();
+        };
+
+        // Top: Before
+        drawCover(imgBefore, 40, 40, 920, 640);
+        // Bottom: After
+        drawCover(imgAfter, 40, 720, 920, 640);
+
+        // Badges
+        ctx.fillStyle = "rgba(5, 7, 13, 0.85)";
+        ctx.beginPath();
+        ctx.roundRect(65, 65, 160, 44, 10);
+        ctx.fill();
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "bold 20px sans-serif";
+        ctx.fillText("BEFORE", 102, 94);
+
+        ctx.fillStyle = "#4F46E5";
+        ctx.beginPath();
+        ctx.roundRect(65, 745, 210, 44, 10);
+        ctx.fill();
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillText("AFTER AI", 108, 774);
+
+        // Bottom Branding Bar
+        ctx.fillStyle = "#F8FAFC";
+        ctx.font = "bold 26px sans-serif";
+        ctx.fillText(`RoomCraft AI Architect — ${selectedStyle}`, 44, 1425);
+        ctx.fillStyle = "#94A3B8";
+        ctx.font = "20px sans-serif";
+        ctx.fillText("Redesign your room in 10 seconds • room-makeover-ai-nu.vercel.app", 44, 1462);
+
+        const link = document.createElement("a");
+        link.href = canvas.toDataURL("image/png");
+        link.download = `pinterest-room-makeover-${Date.now()}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
+      imgAfter.src = resultImage;
+    };
+    imgBefore.src = previewUrl;
+  };
+
+  const handleCopyHex = (hex) => {
+    navigator.clipboard?.writeText(hex);
+    setCopiedHex(hex);
+    setTimeout(() => setCopiedHex(null), 1800);
   };
 
   const totalEstimatedBudget = products.reduce((sum, item) => {
@@ -348,26 +551,36 @@ export default function Home() {
         }
         .workspace-grid {
           display: grid;
-          grid-template-columns: 1fr 1.4fr;
+          grid-template-columns: 1fr 1.45fr;
           gap: 32px;
         }
         .aesthetic-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          gap: 12px;
+          gap: 10px;
         }
         .catalog-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
           gap: 20px;
         }
+        .palette-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 12px;
+        }
         .dual-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 22px;
         }
+        .history-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
+        }
         .aesthetic-card {
-          transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .aesthetic-card:hover {
           transform: translateY(-2px);
@@ -405,11 +618,13 @@ export default function Home() {
         @media (max-width: 900px) {
           .workspace-grid { grid-template-columns: 1fr; }
           .aesthetic-grid { grid-template-columns: repeat(2, 1fr); }
+          .palette-grid { grid-template-columns: repeat(2, 1fr); }
           .dual-grid { grid-template-columns: 1fr; }
+          .history-grid { grid-template-columns: 1fr; }
         }
       `}</style>
 
-      {/* Architectural Grid + Radial Top Spotlight */}
+      {/* Architectural Grid + Radial Spotlight */}
       <div
         className="bg-grid-pattern"
         style={{
@@ -440,7 +655,7 @@ export default function Home() {
           top: 0,
           zIndex: 50,
           backdropFilter: "blur(20px)",
-          backgroundColor: "rgba(5, 7, 13, 0.82)",
+          backgroundColor: "rgba(5, 7, 13, 0.84)",
           borderBottom: "1px solid rgba(255, 255, 255, 0.08)"
         }}
       >
@@ -452,7 +667,8 @@ export default function Home() {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: "16px"
+            flexWrap: "wrap",
+            gap: "12px"
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -492,29 +708,56 @@ export default function Home() {
             </div>
           </div>
 
-          <div
-            style={{
-              padding: "6px 14px",
-              borderRadius: "999px",
-              backgroundColor: "rgba(255, 255, 255, 0.04)",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              fontSize: "12px",
-              display: "flex",
-              alignItems: "center",
-              gap: "8px"
-            }}
-          >
-            <span
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            {!bonusClaimed && (
+              <button
+                type="button"
+                onClick={handleUnlockBonusCredit}
+                style={{
+                  padding: "6px 12px",
+                  borderRadius: "999px",
+                  backgroundColor: "rgba(99, 102, 241, 0.14)",
+                  border: "1px solid rgba(129, 140, 248, 0.35)",
+                  color: "#a5b4fc",
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px"
+                }}
+              >
+                <Icons.Share />
+                <span>+1 Free Render</span>
+              </button>
+            )}
+
+            <div
               style={{
-                width: "7px",
-                height: "7px",
-                borderRadius: "50%",
-                backgroundColor: creditsLeft > 0 ? "#10b981" : "#f43f5e",
-                boxShadow: creditsLeft > 0 ? "0 0 8px #10b981" : "none"
+                padding: "6px 14px",
+                borderRadius: "999px",
+                backgroundColor: "rgba(255, 255, 255, 0.04)",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                fontSize: "12px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px"
               }}
-            />
-            <span style={{ color: "#94a3b8" }}>Daily Renders:</span>
-            <strong style={{ color: "#f8fafc", fontWeight: 700 }}>{creditsLeft} / 2</strong>
+            >
+              <span
+                style={{
+                  width: "7px",
+                  height: "7px",
+                  borderRadius: "50%",
+                  backgroundColor: creditsLeft > 0 ? "#10b981" : "#f43f5e",
+                  boxShadow: creditsLeft > 0 ? "0 0 8px #10b981" : "none"
+                }}
+              />
+              <span style={{ color: "#94a3b8" }}>Daily Renders:</span>
+              <strong style={{ color: "#f8fafc", fontWeight: 700 }}>
+                {creditsLeft} / {bonusClaimed ? 3 : 2}
+              </strong>
+            </div>
           </div>
         </div>
       </header>
@@ -524,13 +767,13 @@ export default function Home() {
         style={{
           maxWidth: "1160px",
           margin: "0 auto",
-          padding: "48px 24px 80px",
+          padding: "46px 24px 80px",
           position: "relative",
           zIndex: 10
         }}
       >
         {/* Minimalist Editorial Hero */}
-        <div style={{ textAlign: "center", maxWidth: "720px", margin: "0 auto 44px" }}>
+        <div style={{ textAlign: "center", maxWidth: "740px", margin: "0 auto 42px" }}>
           <div
             style={{
               display: "inline-flex",
@@ -549,7 +792,7 @@ export default function Home() {
           >
             <span style={{ color: "#38bdf8" }}>SPATIAL GEOMETRY PRESERVATION</span>
             <span style={{ color: "#475569" }}>|</span>
-            <span>AUTOMATED PRODUCT SOURCING</span>
+            <span>PAINT HEX & PRODUCT SOURCING</span>
           </div>
 
           <h1
@@ -576,7 +819,7 @@ export default function Home() {
 
           <p style={{ color: "#94a3b8", fontSize: "16px", lineHeight: 1.65 }}>
             Upload a photograph of your room or workstation. Our vision engine locks your exact
-            structural layout while rendering photorealistic upgrades and curating shoppable furniture.
+            structural layout while rendering photorealistic upgrades, paint color codes, and shoppable furniture.
           </p>
         </div>
 
@@ -626,7 +869,7 @@ export default function Home() {
                 style={{
                   position: "relative",
                   flex: 1,
-                  minHeight: "280px",
+                  minHeight: "340px",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
@@ -693,7 +936,7 @@ export default function Home() {
               </label>
             </div>
 
-            {/* Right Column: Aesthetic Selector & Prompt */}
+            {/* Right Column: Aesthetic Selector, Room & Budget Tiers, Prompt */}
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
               <div>
                 <div
@@ -709,7 +952,7 @@ export default function Home() {
                   02. Architectural Direction
                 </div>
 
-                <div className="aesthetic-grid" style={{ marginBottom: "20px" }}>
+                <div className="aesthetic-grid" style={{ marginBottom: "18px" }}>
                   {STYLES.map((style) => {
                     const active = selectedStyle === style.id;
                     const IconComp = style.Icon;
@@ -721,7 +964,7 @@ export default function Home() {
                         onClick={() => setSelectedStyle(style.id)}
                         style={{
                           textAlign: "left",
-                          padding: "14px",
+                          padding: "13px",
                           borderRadius: "14px",
                           border: active
                             ? `1.5px solid ${style.accentColor}`
@@ -739,14 +982,14 @@ export default function Home() {
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "space-between",
-                            marginBottom: "10px"
+                            marginBottom: "8px"
                           }}
                         >
                           <div
                             style={{
-                              width: "34px",
-                              height: "34px",
-                              borderRadius: "9px",
+                              width: "32px",
+                              height: "32px",
+                              borderRadius: "8px",
                               backgroundColor: active ? `${style.accentColor}22` : "rgba(255,255,255,0.05)",
                               color: active ? style.accentColor : "#94a3b8",
                               display: "flex",
@@ -770,7 +1013,7 @@ export default function Home() {
                             {style.badge}
                           </span>
                         </div>
-                        <div style={{ fontWeight: 700, fontSize: "13px", marginBottom: "3px" }}>
+                        <div style={{ fontWeight: 700, fontSize: "13px", marginBottom: "2px" }}>
                           {style.label}
                         </div>
                         <div style={{ fontSize: "11px", color: "#64748b", lineHeight: 1.3 }}>
@@ -781,17 +1024,98 @@ export default function Home() {
                   })}
                 </div>
 
+                {/* Room Function & Target Budget Tier Pills */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "16px" }}>
+                  <div>
+                    <div
+                      style={{
+                        fontSize: "10px",
+                        fontWeight: 700,
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                        color: "#94a3b8",
+                        marginBottom: "7px"
+                      }}
+                    >
+                      03. Space Function
+                    </div>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                      {ROOM_TYPES.map((rt) => {
+                        const active = roomType === rt;
+                        return (
+                          <button
+                            key={rt}
+                            type="button"
+                            onClick={() => setRoomType(rt)}
+                            style={{
+                              padding: "6px 10px",
+                              borderRadius: "8px",
+                              border: active ? "1px solid #818cf8" : "1px solid rgba(255,255,255,0.09)",
+                              backgroundColor: active ? "rgba(79, 70, 229, 0.25)" : "rgba(7, 10, 19, 0.8)",
+                              color: active ? "#ffffff" : "#94a3b8",
+                              fontSize: "11px",
+                              fontWeight: 600,
+                              cursor: "pointer"
+                            }}
+                          >
+                            {rt}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div
+                      style={{
+                        fontSize: "10px",
+                        fontWeight: 700,
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                        color: "#94a3b8",
+                        marginBottom: "7px"
+                      }}
+                    >
+                      04. Target Sourcing Budget
+                    </div>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                      {BUDGET_TIERS.map((bt) => {
+                        const active = budgetTier === bt;
+                        return (
+                          <button
+                            key={bt}
+                            type="button"
+                            onClick={() => setBudgetTier(bt)}
+                            style={{
+                              padding: "6px 10px",
+                              borderRadius: "8px",
+                              border: active ? "1px solid #34d399" : "1px solid rgba(255,255,255,0.09)",
+                              backgroundColor: active ? "rgba(16, 185, 129, 0.18)" : "rgba(7, 10, 19, 0.8)",
+                              color: active ? "#6ee7b7" : "#94a3b8",
+                              fontSize: "11px",
+                              fontWeight: 600,
+                              cursor: "pointer"
+                            }}
+                          >
+                            {bt}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
                 <div
                   style={{
-                    fontSize: "11px",
+                    fontSize: "10px",
                     fontWeight: 700,
                     letterSpacing: "0.08em",
                     textTransform: "uppercase",
                     color: "#94a3b8",
-                    marginBottom: "8px"
+                    marginBottom: "7px"
                   }}
                 >
-                  03. Custom Specification (Optional)
+                  05. Custom Specification (Optional)
                 </div>
 
                 <input
@@ -801,14 +1125,14 @@ export default function Home() {
                   placeholder="Specify custom details (e.g., dual curved monitors, warm oak shelving, indoor monstera)..."
                   style={{
                     width: "100%",
-                    padding: "13px 16px",
+                    padding: "12px 15px",
                     borderRadius: "12px",
                     backgroundColor: "rgba(7, 10, 19, 0.9)",
                     border: "1px solid rgba(255, 255, 255, 0.1)",
                     color: "#f8fafc",
                     fontSize: "13px",
                     outline: "none",
-                    marginBottom: "20px"
+                    marginBottom: "18px"
                   }}
                 />
               </div>
@@ -869,10 +1193,33 @@ export default function Home() {
                     backgroundColor: "rgba(225, 29, 72, 0.12)",
                     border: "1px solid rgba(244, 63, 94, 0.3)",
                     color: "#fda4af",
-                    fontSize: "13px"
+                    fontSize: "13px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: "12px",
+                    flexWrap: "wrap"
                   }}
                 >
-                  {error}
+                  <span>{error}</span>
+                  {!bonusClaimed && creditsLeft <= 0 && (
+                    <button
+                      type="button"
+                      onClick={handleUnlockBonusCredit}
+                      style={{
+                        padding: "6px 12px",
+                        borderRadius: "8px",
+                        border: "none",
+                        backgroundColor: "#4f46e5",
+                        color: "#ffffff",
+                        fontSize: "12px",
+                        fontWeight: 700,
+                        cursor: "pointer"
+                      }}
+                    >
+                      Share to Unlock +1
+                    </button>
+                  )}
                 </div>
               )}
             </div>
@@ -948,7 +1295,7 @@ export default function Home() {
           </div>
         )}
 
-        {/* Interactive Before / After Studio Viewport */}
+        {/* Interactive Before / After Studio Viewport + Paint HEX Swatches */}
         {resultImage && previewUrl && !loading && (
           <div
             className="reveal-block"
@@ -992,7 +1339,7 @@ export default function Home() {
                   </span>
                 </div>
                 <p style={{ fontSize: "13px", color: "#94a3b8", marginTop: "4px" }}>
-                  Drag the comparison handle horizontally to inspect architectural upgrades
+                  Drag the comparison handle horizontally or export a vertical Pinterest Before & After pin
                 </p>
               </div>
 
@@ -1051,14 +1398,35 @@ export default function Home() {
 
                 <button
                   type="button"
-                  onClick={handleDownload}
+                  onClick={handleDownloadPinterestCollage}
+                  style={{
+                    padding: "9px 14px",
+                    borderRadius: "10px",
+                    border: "1px solid rgba(244, 63, 94, 0.4)",
+                    backgroundColor: "rgba(225, 29, 72, 0.16)",
+                    color: "#fda4af",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "7px"
+                  }}
+                >
+                  <Icons.PinCollage />
+                  <span>Pinterest Pin (Before+After)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleDownloadHD}
                   style={{
                     padding: "9px 16px",
                     borderRadius: "10px",
                     border: "1px solid rgba(255,255,255,0.15)",
                     backgroundColor: "#ffffff",
                     color: "#05070D",
-                    fontSize: "13px",
+                    fontSize: "12px",
                     fontWeight: 700,
                     cursor: "pointer",
                     display: "inline-flex",
@@ -1217,6 +1585,70 @@ export default function Home() {
                 </div>
               </div>
             )}
+
+            {/* Architectural Paint & LED HEX Palette Strip */}
+            {palette.length > 0 && (
+              <div style={{ marginTop: "28px", paddingTop: "24px", borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    fontSize: "11px",
+                    fontWeight: 700,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                    color: "#94a3b8",
+                    marginBottom: "12px"
+                  }}
+                >
+                  <Icons.Palette />
+                  <span>Architectural Paint & Lighting Color Codes (Click to Copy HEX)</span>
+                </div>
+
+                <div className="palette-grid">
+                  {palette.map((swatch, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => handleCopyHex(swatch.hex)}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                        padding: "10px 12px",
+                        borderRadius: "12px",
+                        backgroundColor: "rgba(7, 10, 19, 0.85)",
+                        border: "1px solid rgba(255, 255, 255, 0.09)",
+                        cursor: "pointer",
+                        textAlign: "left",
+                        color: "#ffffff"
+                      }}
+                    >
+                      <span
+                        style={{
+                          width: "34px",
+                          height: "34px",
+                          borderRadius: "8px",
+                          backgroundColor: swatch.hex,
+                          border: "1px solid rgba(255,255,255,0.25)",
+                          flexShrink: 0
+                        }}
+                      />
+                      <div style={{ overflow: "hidden", flex: 1 }}>
+                        <div style={{ fontSize: "12px", fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {swatch.name}
+                        </div>
+                        <div style={{ fontSize: "11px", color: "#94a3b8", display: "flex", alignItems: "center", gap: "5px", marginTop: "2px" }}>
+                          <span>{copiedHex === swatch.hex ? "Copied!" : swatch.hex}</span>
+                          <Icons.Copy />
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -1230,7 +1662,8 @@ export default function Home() {
               border: "1px solid rgba(255, 255, 255, 0.09)",
               borderRadius: "24px",
               padding: "32px",
-              boxShadow: "0 30px 70px rgba(0, 0, 0, 0.65)"
+              boxShadow: "0 30px 70px rgba(0, 0, 0, 0.65)",
+              marginBottom: "42px"
             }}
           >
             <div
@@ -1258,7 +1691,7 @@ export default function Home() {
                   }}
                 >
                   <Icons.ShoppingBag />
-                  <span>AI Bill of Materials & Sourcing</span>
+                  <span>AI Bill of Materials & Sourcing ({budgetTier})</span>
                 </div>
                 <h3 style={{ fontSize: "22px", fontWeight: 800, letterSpacing: "-0.02em" }}>
                   Shop This Exact Aesthetic
@@ -1394,6 +1827,97 @@ export default function Home() {
             </div>
           </div>
         )}
+
+        {/* Recent Studio Renders History Strip */}
+        {history.length > 0 && (
+          <div
+            style={{
+              backgroundColor: "rgba(13, 18, 30, 0.72)",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+              borderRadius: "24px",
+              padding: "28px",
+              marginBottom: "42px"
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
+              <span style={{ color: "#818cf8" }}>
+                <Icons.History />
+              </span>
+              <h3 style={{ fontSize: "16px", fontWeight: 700, color: "#f8fafc" }}>
+                Recent Studio Renders (Click to Reload)
+              </h3>
+            </div>
+
+            <div className="history-grid">
+              {history.map((entry) => (
+                <button
+                  key={entry.id}
+                  type="button"
+                  onClick={() => loadFromHistory(entry)}
+                  style={{
+                    textAlign: "left",
+                    padding: "12px",
+                    borderRadius: "14px",
+                    backgroundColor: "rgba(7, 10, 19, 0.85)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    cursor: "pointer",
+                    color: "#ffffff"
+                  }}
+                >
+                  <img
+                    src={entry.after}
+                    alt={entry.style}
+                    style={{ width: "100%", height: "140px", objectFit: "cover", borderRadius: "10px", marginBottom: "10px" }}
+                  />
+                  <div style={{ fontSize: "13px", fontWeight: 700 }}>{entry.style}</div>
+                  <div style={{ fontSize: "11px", color: "#64748b", marginTop: "2px" }}>
+                    {entry.roomType || "Workspace"} • {entry.products?.length || 0} sourced items
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Editorial SEO & Architectural FAQ Section */}
+        <section
+          style={{
+            backgroundColor: "rgba(13, 18, 30, 0.65)",
+            border: "1px solid rgba(255, 255, 255, 0.08)",
+            borderRadius: "24px",
+            padding: "32px"
+          }}
+        >
+          <div style={{ marginBottom: "22px" }}>
+            <div style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", color: "#818cf8", marginBottom: "6px" }}>
+              ARCHITECTURAL STUDIO FAQ
+            </div>
+            <h3 style={{ fontSize: "20px", fontWeight: 800, color: "#ffffff" }}>
+              How RoomCraft AI Works
+            </h3>
+          </div>
+
+          <div style={{ display: "grid", gap: "16px" }}>
+            {FAQ_ITEMS.map((faq, idx) => (
+              <div
+                key={idx}
+                style={{
+                  padding: "18px 20px",
+                  borderRadius: "14px",
+                  backgroundColor: "rgba(7, 10, 19, 0.8)",
+                  border: "1px solid rgba(255, 255, 255, 0.07)"
+                }}
+              >
+                <div style={{ fontSize: "14px", fontWeight: 700, color: "#f1f5f9", marginBottom: "6px" }}>
+                  {faq.q}
+                </div>
+                <div style={{ fontSize: "13px", color: "#94a3b8", lineHeight: 1.6 }}>
+                  {faq.a}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
       </main>
     </div>
   );
