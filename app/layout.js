@@ -1,5 +1,3 @@
-import "./globals.css";
-
 export const metadata = {
   title: "RoomCraft AI Architect — Free AI Room & Desk Setup Makeover",
   description:
