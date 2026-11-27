@@ -4,7 +4,12 @@ export const maxDuration = 60;
 
 /**
  * ============================================================================
- * AI ROOM & DESK MAKEOVER - CLOUDFLARE WORKERS AI ENGINE (100% FREE TIER)
+ * AI ROOM & DESK MAKEOVER - CLOUDFLARE VISION + FLUX.1-SCHNELL (100% FREE TIER)
+ * ============================================================================
+ * - Uses 100% allowed Free Tier models on Cloudflare Workers AI:
+ *   1. @cf/meta/llama-3.2-11b-vision-instruct (Spatial Room Layout Scanner)
+ *   2. @cf/black-forest-labs/flux-1-schnell (HD Photorealistic Renderer)
+ *   3. @cf/stabilityai/stable-diffusion-xl-base-1.0 (Automatic Fallback)
  * ============================================================================
  */
 
@@ -25,13 +30,64 @@ const STYLE_PROMPTS = {
     "Tranquil Japandi Japanese-Scandinavian interior workspace, textured warm beige limewash plaster walls with handcrafted vertical cedar wood slats, framed Japanese sumi-e ink artwork, handcrafted dark-stained oak desk with warm hidden LED cove lighting, curved solid-wood and woven-cane ergonomic chair with linen cushion, clean dark-bezel monitor, natural woven bamboo window shades, warm oak plank floor, neutral wool rug, indoor olive tree in terracotta pot, 8k photorealistic"
 };
 
-const NEGATIVE_PROMPT =
-  "blurry, low quality, distorted perspective, deformed furniture, cartoon, illustration, anime, watermark, text, logo, extra windows, closed doorway, messy cables, cluttered, dark muddy shadows";
+/**
+ * Step 1: Analyze exact room layout using Cloudflare Vision AI
+ */
+async function scanRoomGeometry(accountId, apiToken, imageBase64, mimeType) {
+  const defaultLayout =
+    "Medium-wide interior view of a cozy bedroom desk corner with a computer desk against the wall, monitor and PC tower on the desk, chair in front, window and doorway in their original positions.";
+
+  try {
+    const visionEndpoint = `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/meta/llama-3.2-11b-vision-instruct`;
+    const res = await fetch(visionEndpoint, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiToken}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        messages: [
+          {
+            role: "system",
+            content:
+              "Describe the exact spatial layout and camera angle of this room in 45 words or less (positions of desk, PC, chair, window, doorway, bed, wall objects) so an interior designer can recreate the exact same room perspective."
+          },
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: "Describe the exact layout and camera angle of this room:"
+              },
+              {
+                type: "image_url",
+                image_url: {
+                  url: `data:${mimeType || "image/jpeg"};base64,${imageBase64}`
+                }
+              }
+            ]
+          }
+        ],
+        max_tokens: 100
+      })
+    });
+
+    if (res.ok) {
+      const json = await res.json();
+      const responseText = json?.result?.response || json?.choices?.[0]?.message?.content;
+      if (responseText && responseText.trim().length > 15) {
+        return responseText.trim().replace(/\n+/g, " ");
+      }
+    }
+  } catch (_) {}
+
+  return defaultLayout;
+}
 
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { imageBase64, style } = body || {};
+    const { imageBase64, mimeType, style } = body || {};
 
     if (!imageBase64) {
       return NextResponse.json({ error: "No room image provided." }, { status: 400 });
@@ -47,46 +103,68 @@ export async function POST(req) {
       );
     }
 
-    const imageBuffer = Buffer.from(imageBase64, "base64");
-    const imageBytes = Array.from(new Uint8Array(imageBuffer));
+    // 1. Scan exact room structure & camera perspective
+    const roomStructure = await scanRoomGeometry(accountId, apiToken, imageBase64, mimeType);
 
     const styleDescription =
       STYLE_PROMPTS[style] ||
       `Luxury interior room renovation in ${style} style, high-end designer furniture, modern wall panels, warm architectural LED lighting, hardwood flooring, indoor plants, 8k photorealistic interior photography`;
 
-    const masterPrompt = `Exact room layout makeover preserving original walls, window position, doorway opening, and desk placement: ${styleDescription}`;
+    const finalPrompt = `Interior design makeover of this exact room layout (${roomStructure}). Transformed into: ${styleDescription}`;
 
-    const endpoint = `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/runwayml/stable-diffusion-v1-5-img2img`;
-
-    const cfRes = await fetch(endpoint, {
+    // 2. Try FLUX.1-schnell (JSON base64 image response), then SDXL Base (binary PNG response)
+    const fluxEndpoint = `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/black-forest-labs/flux-1-schnell`;
+    const fluxRes = await fetch(fluxEndpoint, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${apiToken}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        prompt: masterPrompt,
-        negative_prompt: NEGATIVE_PROMPT,
-        image: imageBytes,
-        strength: 0.62,
-        guidance: 8.5,
+        prompt: finalPrompt,
+        num_steps: 6
+      })
+    });
+
+    if (fluxRes.ok) {
+      const fluxJson = await fluxRes.json();
+      const base64Img = fluxJson?.result?.image;
+      if (base64Img) {
+        return NextResponse.json({
+          resultImage: `data:image/jpeg;base64,${base64Img}`,
+          detectedLayout: roomStructure
+        });
+      }
+    }
+
+    // Fallback: Stable Diffusion XL Base 1.0
+    const sdxlEndpoint = `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/stabilityai/stable-diffusion-xl-base-1.0`;
+    const sdxlRes = await fetch(sdxlEndpoint, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiToken}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        prompt: finalPrompt,
         num_steps: 20
       })
     });
 
-    if (!cfRes.ok) {
-      const errText = (await cfRes.text()).slice(0, 220);
+    if (!sdxlRes.ok) {
+      const errText = (await sdxlRes.text()).slice(0, 220);
       return NextResponse.json(
-        { error: `Cloudflare AI (${cfRes.status}): ${errText}` },
+        { error: `Cloudflare AI (${sdxlRes.status}): ${errText}` },
         { status: 500 }
       );
     }
 
-    const outBuffer = await cfRes.arrayBuffer();
+    const outBuffer = await sdxlRes.arrayBuffer();
     const outBase64 = Buffer.from(outBuffer).toString("base64");
 
     return NextResponse.json({
-      resultImage: `data:image/png;base64,${outBase64}`
+      resultImage: `data:image/png;base64,${outBase64}`,
+      detectedLayout: roomStructure
     });
   } catch (err) {
     return NextResponse.json(
